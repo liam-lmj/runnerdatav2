@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from database.database_constants import seconds_to_hours
+from database.database_constants import distance_fields, meters_to_miles, activity_base_url
 from database.database_helper_functions import format_time_as_hours
 
 def dict_factory(cursor, row): 
@@ -54,6 +54,8 @@ def get_week_data(week, runner):
 
         activity["run_description"] = f"{activity["day"]} {activity["run_type"]} Run"
         activity["formated_time"] = format_time_as_hours(activity["activity_seconds"])
+        activity["activity_url"] = f"{activity_base_url}{activity["activity_id"]}"
+        format_distances(runner, activity)
 
     return(data)
 
@@ -76,3 +78,8 @@ def get_weeks_active(runner):
     weeks = [entry["week"] for entry in data]
     most_recent_week = weeks[0] if weeks else None
     return weeks, most_recent_week
+
+def format_distances(runner, activity):
+    #replace with database call in future
+    for field in distance_fields:
+        activity[field] = round(activity[field] * meters_to_miles, 2)

@@ -3,13 +3,13 @@ from database.database_queries import get_week_data, get_weeks_active
 from database.database_plots import weekly_mileage_type_pie
 from database.database_helper_functions import format_time_as_hours
 
-week_bp = Blueprint('week', __name__)
+week_bp = Blueprint("week", __name__)
 
-@week_bp.route("/week", methods=['GET', 'POST'])
+@week_bp.route("/week", methods=["GET", "POST"])
 def weekly_view():
-    if not 'user_id' in session:
+    if not "user_id" in session:
         return redirect("/")
-    runner = session['user_id']     
+    runner = session["user_id"]     
 
     weeks_active, most_recent_week = get_weeks_active(runner)
 

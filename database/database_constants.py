@@ -24,6 +24,13 @@ valid_activity_types = ["Run"]
 
 #conversions
 seconds_to_hours = 1 / 3600
+meters_to_miles = 1 / 1609.34
 
-#lap_types
+#lap types
 lap_types = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance"]
+
+#distance fields
+distance_fields = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance", "activity_meters"]
+
+#base urls 
+activity_base_url = "http://127.0.0.1:5000/activity/"

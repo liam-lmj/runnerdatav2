@@ -6,13 +6,25 @@ function update_table(updated_data) {
     const table_body = document.getElementById("activity_table").querySelector("tbody");
     table_body.innerHTML = ""; 
     const headers = ["formatted_date", "run_description", "activity_meters", "formated_time", "heartrate_average"]
+    const link_field = "run_description";
 
     for (let activity of updated_data) {
         const tr = document.createElement("tr");
         for (let header of headers) {
+
             const cell = document.createElement("td");
-            cell.textContent = activity[header]
-            tr.appendChild(cell)
+
+            if (header === link_field) {
+                const link = document.createElement("a");
+                link.href = activity["activity_url"];
+                link.textContent = activity[header];
+                cell.appendChild(link);
+            }
+            else {
+                cell.textContent = activity[header];
+            }
+
+            tr.appendChild(cell);
         }
         table_body.appendChild(tr); 
     }
