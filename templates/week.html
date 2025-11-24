@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Week
+{% endblock %}
+
+{% block page %}
+
+	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
+		<select class="drop-down"  id="week">
+			{% for week in weeks_active %}
+				<option value="{{ week }}">{{ week }}</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<div class="w3-row-padding w3-margin-bottom">
+		<div class="w3-quarter">
+			<div class="w3-container w3-teal w3-padding-16">
+				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="total_distance">{{ total_distance }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Total Distance</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-blue w3-padding-16">
+				<div class="w3-left"><i class="fa fa-clock-o w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="formated_total_time">{{ formated_total_time }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Total Time</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-red w3-padding-16">
+				<div class="w3-left"><i class="fa fa-heart w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="average_heartrate">{{ average_heartrate }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Heartrate</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-orange w3-text-white w3-padding-16">
+				<div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="run_count">{{ run_count }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Run Count</h4>
+			</div>
+		</div>
+	</div>
+
+	<div class="w3-panel">
+		<div class="w3-row-padding" style="margin:0 -16px">
+			<div class="w3-third">
+				<h5><b>Mileage Breakdown</b></h5>
+				<div id="pie"></div>
+			</div>
+			<div class="w3-twothird">
+				<h5><b>Activities</b></h5>
+				<table class="w3-table w3-striped w3-white" id="activity_table">
+					  <thead>
+						<tr class="w3-light-grey">
+							<th>Date</th>
+							<th>Description</th>
+							<th>Distance</th>
+							<th>Time</th>
+							<th>Heartrate</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<script> 
+		const pie_chart_safe = {{ pie_chart | safe }};
+		const data_safe = {{ data | safe }};
+	</script>
+	<script src="./static/week.js"></script>
+	<script>initializeCharts(pie_chart_safe, data_safe)</script>
+
+{% endblock %}
