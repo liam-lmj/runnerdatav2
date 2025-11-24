@@ -30,7 +30,7 @@ function update_table(updated_data) {
     }
 }
 
-function initializeCharts(pie_chart, data) {
+function initialiseCharts(pie_chart, data) {
     update_charts(pie_chart);
     update_table(data);
 

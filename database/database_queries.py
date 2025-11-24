@@ -14,6 +14,37 @@ def database_path():
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
 
+def get_activity_plot(activity):
+    db_path = database_path()
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = dict_factory 
+    c = conn.cursor()
+    c.execute("SELECT map_plot FROM ACTIVITY WHERE activity_id = ?", (activity,))
+    data = c.fetchone()
+    conn.close()
+    plot = data["map_plot"]
+
+    return(plot)
+
+def get_lap_data(activity):
+    db_path = database_path()
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = dict_factory 
+    c = conn.cursor()
+    c.execute("SELECT * FROM LAP WHERE activity_id = ?", (activity,))
+
+    data = c.fetchall()
+    conn.close()
+
+    for lap in data:
+        lap["lap_pace"] = lap["lap_meters"] / lap["lap_seconds"]
+        lap["lap_formatted_time"] = format_time_as_hours(lap["lap_seconds"])
+
+
+    return(data)
+
 def get_week_data(week, runner):
     db_path = database_path()
 
@@ -80,6 +111,8 @@ def get_weeks_active(runner):
     return weeks, most_recent_week
 
 def format_distances(runner, activity):
-    #replace with database call in future
+    #replace with database call for runner pref in future
+    conversion = meters_to_miles
     for field in distance_fields:
-        activity[field] = round(activity[field] * meters_to_miles, 2)
+        if activity.get(field):
+            activity[field] = round(activity[field] * conversion, 2)

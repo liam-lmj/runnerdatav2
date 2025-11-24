@@ -1,150 +1,91 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Activity</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-</style>
-</head>
-<body class="w3-light-grey">
+{% extends "layout.html" %}
 
-<!-- Top banner -->
-<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <span class="w3-bar-item w3-right">Running Data App</span>
-</div>
 
-<!-- Sidebar -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
-  <div class="w3-container w3-row">
-    <div class="w3-col s4">
-      <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
-    </div>
-    <div class="w3-col s8 w3-bar">
-      <span>Welcome, <strong>Liam</strong></span><br>
-    </div>
-  </div>
-  <hr>
-  <div class="w3-container">
-    <h5>Menu</h5>
-  </div>
-  <div class="w3-bar-block">
-    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Dashboard</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Weekly View</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Activity View</a>
-  </div>
-</nav>
+{% block title %}
+    Activity
+{% endblock %}
 
-<!-- !Main Page! -->
-<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+{% block page %}
 
-  <!-- Header -->
-  <header class="w3-container" style="padding-top:22px">
-    <h5><b>Activity</b></h5>
-  </header>
+	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
+		<select class="drop-down"  id="week">
+		</select>
+	</div>
 
-  <div class="w3-row-padding w3-margin-bottom">
-    <div class="w3-quarter">
-      <div class="w3-container w3-teal w3-padding-16">
-        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>52</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Distance</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-blue w3-padding-16">
-        <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>99</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Time</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-red w3-padding-16">
-        <div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>23</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Heartrate</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-orange w3-text-white w3-padding-16">
-        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>50</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Cadence</h4>
-      </div>
-    </div>
-  </div>
+	<div class="w3-row-padding w3-margin-bottom">
+		<div class="w3-quarter">
+			<div class="w3-container w3-teal w3-padding-16">
+				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="total_distance">{{ total_distance }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Total Distance</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-blue w3-padding-16">
+				<div class="w3-left"><i class="fa fa-clock-o w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="formated_total_time">{{ formated_total_time }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Total Time</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-red w3-padding-16">
+				<div class="w3-left"><i class="fa fa-heart w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="average_heartrate">{{ average_heartrate }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Heartrate</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-orange w3-text-white w3-padding-16">
+				<div class="w3-left"><i class="fa fa-tachometer w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="run_count">{{ run_count }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Cadence</h4>
+			</div>
+		</div>
+	</div>
 
-  <div class="w3-panel">
-    <div class="w3-row-padding" style="margin:0 -16px">
-      <div class="w3-third">
-        <h5>Map</h5>
-        <img src="/w3images/region.jpg" style="width:100%" alt="Google Regional Map">
-      </div>
-      <div class="w3-twothird">
-        <h5>Laps</h5>
-        <table class="w3-table w3-striped w3-white">
-          <tr>
-            <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
-            <td>New record, over 90 views.</td>
-            <td><i>10 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-bell w3-text-red w3-large"></i></td>
-            <td>Database error.</td>
-            <td><i>15 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-users w3-text-yellow w3-large"></i></td>
-            <td>New record, over 40 users.</td>
-            <td><i>17 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-comment w3-text-red w3-large"></i></td>
-            <td>New comments.</td>
-            <td><i>25 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-bookmark w3-text-blue w3-large"></i></td>
-            <td>Check transactions.</td>
-            <td><i>28 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-laptop w3-text-red w3-large"></i></td>
-            <td>CPU overload.</td>
-            <td><i>35 mins</i></td>
-          </tr>
-          <tr>
-            <td><i class="fa fa-share-alt w3-text-green w3-large"></i></td>
-            <td>New shares.</td>
-            <td><i>39 mins</i></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <hr>
-  <hr>
+	<div class="w3-panel">
+		<div class="w3-row-padding" style="margin:0 -16px">
+			<div class="w3-third">
+				<h5><b>Activity Map</b></h5>
+				<div> {{ map | safe }} </div>
+			</div>
+			<div class="w3-twothird">
+				<h5><b>Activities</b></h5>
+				<table class="w3-table w3-striped w3-white" id="activity_table">
+					  <thead>
+						<tr class="w3-light-grey">
+							<th>Lap</th>
+							<th>Lap Type</th>
+							<th>Distance</th>
+							<th>Pace</th>
+							<th>Time</th>
+							<th>Heartrate</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<script> 
+		const data_safe = {{ lap_data | safe }};
+	</script>
+	<script src="./static/activity.js"></script>
+	<script>
+        initialise_content(data_safe);
+    </script>
 
-  </div>
-  <!-- End page content -->
-</div>
-
-</body>
-</html>
+{% endblock %}
