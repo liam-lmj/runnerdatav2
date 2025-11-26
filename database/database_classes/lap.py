@@ -8,7 +8,7 @@ class Lap:
         self.lap_split = lap_dictionary["split"]
         self.activity_id = lap_dictionary["activity"]["id"]
         self.lap_meters = lap_dictionary["distance"]
-        self.lap_seconds = lap_dictionary["elapsed_time"]        
+        self.lap_seconds = lap_dictionary["moving_time"]        
         self.lap_heartrate_average = lap_dictionary["average_heartrate"]
         self.lap_heartrate_max = lap_dictionary["max_heartrate"]
         self.lap_cadence = lap_dictionary["average_cadence"]

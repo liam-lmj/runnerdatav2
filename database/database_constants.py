@@ -24,7 +24,9 @@ valid_activity_types = ["Run"]
 
 #conversions
 seconds_to_hours = 1 / 3600
+seconds_to_minutes = 1 / 60
 meters_to_miles = 1 / 1609.34
+cadence_multiplier = 2
 
 #lap types
 lap_types = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance"]

@@ -8,7 +8,11 @@
 {% block page %}
 
 	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
-		<select class="drop-down"  id="week">
+		<select class="drop-down"  id="lap_type">
+			<option value="All">All</option>
+			{% for type in activity_lap_types %}
+				<option value="{{ type }}">{{ type }}</option>
+			{% endfor %}
 		</select>
 	</div>
 
@@ -47,7 +51,7 @@
 			<div class="w3-container w3-orange w3-text-white w3-padding-16">
 				<div class="w3-left"><i class="fa fa-tachometer w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="run_count">{{ run_count }}</h3>
+					<h3 id="cadence">{{ cadence }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Cadence</h4>
@@ -69,9 +73,10 @@
 							<th>Lap</th>
 							<th>Lap Type</th>
 							<th>Distance</th>
-							<th>Pace</th>
 							<th>Time</th>
+                            <th>Pace</th>
 							<th>Heartrate</th>
+                            <th>Cadence</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -83,9 +88,58 @@
 	<script> 
 		const data_safe = {{ lap_data | safe }};
 	</script>
+
 	<script src="./static/activity.js"></script>
+
 	<script>
-        initialise_content(data_safe);
+        function update_table(updated_data) {
+            const table_body = document.getElementById("activity_table").querySelector("tbody");
+            table_body.innerHTML = ""; 
+            const headers = ["lap_split", "lap_type", "lap_meters", "lap_formatted_time", "lap_pace", "lap_heartrate_average", "lap_cadence"]
+
+            for (let activity of updated_data) {
+                const tr = document.createElement("tr");
+                for (let header of headers) {
+
+                    const cell = document.createElement("td");
+                    cell.textContent = activity[header];
+
+                    tr.appendChild(cell);
+                }
+                table_body.appendChild(tr); 
+            }
+        }
+
+        function initialise_content(data) {
+			update_table(data);
+
+			const lap_selector = document.getElementById("lap_type");
+			const total_distance = document.getElementById("total_distance");
+			const average_heartrate = document.getElementById("average_heartrate");
+			const formated_total_time = document.getElementById("formated_total_time");
+			const run_count = document.getElementById("Cadence");
+			
+			lap_selector.addEventListener('change', function() {
+				const selected_type = this.value;
+				fetch(window.location.pathname, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ selected_type, 'type': 'lap_change', })
+				})
+				.then(response => response.json())
+				.then(data => {
+					total_distance.innerText = data.total_distance;
+					average_heartrate.innerText = data.average_heartrate;
+					formated_total_time.innerText = data.formated_total_time;
+					cadence.innerText = data.cadence;
+					const updated_data = data.updated_data
+					update_table(updated_data);
+				});
+			});
+
+        }
+
+        initialise_content(data_safe)
     </script>
 
 {% endblock %}
