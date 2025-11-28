@@ -11,7 +11,6 @@ load_dotenv()
 client_id = os.getenv("client_id")
 client_secret = os.getenv("client_secret")
 
-#THIS IS FOR WHEN APP IS SET UP FOR NOW USE EXISTING REFRESH TOKEN
 def load_runner(code):
     response = requests.post(runner_url, params={"client_id": client_id, 
                                                  "client_secret": client_secret,

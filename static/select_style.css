@@ -1,9 +1,5 @@
 .drop-down {
-    -webkit-appearance: none;
-    -moz-appearance: none;    
-    appearance: none;      
     background-color: #f1f1f1;
-    border: none;
     font-weight: bold;
     width: 170px; 
     height: 45px;  

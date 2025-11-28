@@ -17,7 +17,6 @@ def weekly_view(activity_id):
         lap_data = filter_lap_data(lap_data, request.json["selected_type"])
 
     total_distance, formated_total_time, average_heartrate, cadence = lap_data_summary_fields(lap_data)
-    print(total_distance)
     plot = get_activity_plot(activity_id) 
     map = map_html(plot)
 
