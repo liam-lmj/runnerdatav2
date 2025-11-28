@@ -1,7 +1,7 @@
 import sqlite3
 import os
 from database.database_constants import distance_fields, meters_to_miles, meters_to_kilometers, activity_base_url
-from database.database_helper_functions import format_time_as_hours, format_time_as_minutes
+from database.database_helper_functions import format_time_as_hours, format_time_as_minutes, format_pace
 from database.database_classes.runner import Runner
 
 
@@ -52,11 +52,12 @@ def get_lap_data(activity):
     conn.close()
 
     for lap in data:
-        lap["lap_pace"] = round(lap["lap_meters"] / lap["lap_seconds"],2)
+        lap_pace = lap["lap_meters"] / lap["lap_seconds"]
         lap["lap_formatted_time"] = format_time_as_minutes(lap["lap_seconds"])
         lap["lap_cadence"] *= 2
         runner = Runner(lap["runner_id"])
         format_distances(runner, lap)
+        lap["lap_pace"] = format_pace(runner.preferred_unit, lap_pace)
 
     return(data)
 

@@ -29,6 +29,10 @@ seconds_to_minutes = 1 / 60
 meters_to_miles = 1 / 1609.34
 meters_to_kilometers = 1 / 1000
 cadence_multiplier = 2
+pace_conversion_dict = {
+    "Miles": 26.8223,
+    "Kilometers": 16.6667
+}
 
 #lap types
 lap_types = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance"]

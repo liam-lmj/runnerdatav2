@@ -1,4 +1,4 @@
-from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict
+from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict, pace_conversion_dict
 import polyline
 import folium
 
@@ -50,3 +50,9 @@ def map_html(plot):
 
 def format_unit(unit):
     return  units_dict.get(unit)
+
+def format_pace(unit, lap_pace):
+    conversion = pace_conversion_dict.get(unit, 1)
+    converted_lap_pace = conversion / lap_pace
+    formatted_lap_pace = f"{int(converted_lap_pace)}:{round(60 * (converted_lap_pace - int(converted_lap_pace))):02d} /{format_unit(unit)}"
+    return formatted_lap_pace
