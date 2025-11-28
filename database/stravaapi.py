@@ -1,8 +1,7 @@
 import os
 import requests
-from datetime import datetime
 from dotenv import load_dotenv
-from .database_constants import runner_url, refresh_url, activities_url, laps_url_start, lap_url_end, page_limit
+from .database_constants import runner_url, refresh_url, activities_url, laps_url_start, lap_url_end, page_limit, athlete_url
 from .database_classes.activity import Activity
 from .database_classes.lap import Lap
 from .database_classes.runner import Runner
@@ -73,3 +72,15 @@ def update_laps(access_token, activity, runner_id):
         lap_id = lap_dictionary["id"]
         lap = Lap(lap_id, lap_dictionary, runner.runner_id, runner.prefered_tracking, runner.lt1, runner.lt2, runner.hard)
         lap.add_to_database()
+
+def get_additional_session_attributes(access_token):
+    response = requests.get(athlete_url, params={"access_token": access_token})
+    if not response.ok:
+        raise Exception("Failed to get additonal athlete attributes")
+    
+    response_json = response.json()
+
+    runner_name = response_json["firstname"]
+    runner_photo = response_json["profile_medium"]
+
+    return runner_name, runner_photo

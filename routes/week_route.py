@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, request, jsonify
 from database.database_queries import get_week_data, get_weeks_active
 from database.database_plots import weekly_mileage_type_pie
-from database.database_helper_functions import format_time_as_hours
+from database.database_helper_functions import format_time_as_hours, format_unit
 
 week_bp = Blueprint("week", __name__)
 
@@ -10,6 +10,7 @@ def weekly_view():
     if not "user_id" in session:
         return redirect("/")
     runner = session["user_id"]     
+    unit = format_unit(session["unit"])
 
     weeks_active, most_recent_week = get_weeks_active(runner)
 
@@ -39,7 +40,8 @@ def weekly_view():
                         "average_heartrate": average_heartrate,
                         "total_distance": total_distance,
                         "formated_total_time": formated_total_time,
-                        "updated_data": data}) 
+                        "updated_data": data,
+                        "unit": unit}) 
 
     return render_template("week.html",
                            weeks_active=weeks_active,
@@ -48,4 +50,5 @@ def weekly_view():
                            total_distance=total_distance,
                            formated_total_time=formated_total_time,
                            average_heartrate=average_heartrate,
-                           pie_chart=pie_chart)
+                           pie_chart=pie_chart,
+                           unit=unit)

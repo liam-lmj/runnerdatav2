@@ -38,7 +38,7 @@ class Lap:
 
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
-        c.execute(f"""INSERT INTO LAP 
+        c.execute("""INSERT INTO LAP 
                   VALUES (?,?,?,?,?,?,?,?,?,?)""",
                   (self.lap_id,
                    self.lap_split,

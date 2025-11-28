@@ -21,7 +21,7 @@
 			<div class="w3-container w3-teal w3-padding-16">
 				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="total_distance">{{ total_distance }}</h3>
+					<h3 id="total_distance">{{ total_distance }} {{ unit }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Total Distance</h4>
@@ -87,12 +87,13 @@
 	
 	<script> 
 		const data_safe = {{ lap_data | safe }};
+		const unit_string = "{{ unit }}";
 	</script>
 
 	<script src="{{ url_for('static', filename='activity.js') }}"></script>
 
 	<script>
-        initialise_content(data_safe)
+        initialise_content(data_safe, unit_string);
     </script>
 
 {% endblock %}

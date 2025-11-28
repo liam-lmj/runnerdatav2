@@ -1,7 +1,9 @@
 import sqlite3
 import os
-from database.database_constants import distance_fields, meters_to_miles, activity_base_url
+from database.database_constants import distance_fields, meters_to_miles, meters_to_kilometers, activity_base_url
 from database.database_helper_functions import format_time_as_hours, format_time_as_minutes
+from database.database_classes.runner import Runner
+
 
 def dict_factory(cursor, row): 
     d = {}
@@ -13,6 +15,17 @@ def database_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
+
+def get_runner(runner):
+    db_path = database_path
+
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute("SELECT * FROM RUNNER WHERE runner_id = ?", (runner,))
+    runner = c.fetchone()
+    conn.close
+
+    return runner
 
 def get_activity_plot(activity):
     db_path = database_path()
@@ -42,7 +55,8 @@ def get_lap_data(activity):
         lap["lap_pace"] = round(lap["lap_meters"] / lap["lap_seconds"],2)
         lap["lap_formatted_time"] = format_time_as_minutes(lap["lap_seconds"])
         lap["lap_cadence"] *= 2
-
+        runner = Runner(lap["runner_id"])
+        format_distances(runner, lap)
 
     return(data)
 
@@ -87,7 +101,8 @@ def get_week_data(week, runner):
         activity["run_description"] = f"{activity["day"]} {activity["run_type"]} Run"
         activity["formated_time"] = format_time_as_hours(activity["activity_seconds"])
         activity["activity_url"] = f"{activity_base_url}{activity["activity_id"]}"
-        format_distances(runner, activity)
+        runner_obj = Runner(runner)
+        format_distances(runner_obj, activity)
 
     return(data)
 
@@ -112,8 +127,13 @@ def get_weeks_active(runner):
     return weeks, most_recent_week
 
 def format_distances(runner, activity):
-    #replace with database call for runner pref in future
-    conversion = meters_to_miles
+    units = runner.preferred_unit
+
+    if units == "Miles":
+        conversion = meters_to_miles
+    elif units == "Kilometers":
+        conversion = meters_to_kilometers
+
     for field in distance_fields:
         if activity.get(field):
             activity[field] = round(activity[field] * conversion, 2)

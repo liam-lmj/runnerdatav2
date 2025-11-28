@@ -26,10 +26,10 @@
             <br>
             <div class="w3-container w3-row">
                 <div class="w3-col s4">
-                    <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
+                    <img src="{{ session['photo'] }}" class="w3-circle w3-margin-right" style="width:46px">
                 </div>
                 <div class="w3-col s8 w3-bar">
-                    <span>Welcome, <strong>Liam</strong></span><br>
+                    <span>Welcome, <strong>{{ session["user_name"] }}</strong></span><br>
                 </div>
             </div>
             <hr>
@@ -37,9 +37,8 @@
                 <h5>Menu</h5>
             </div>
             <div class="w3-bar-block">
-                <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Dashboard</a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Weekly View</a>
-                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Activity View</a>
+                <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Dashboard</a>
+                <a href="http://127.0.0.1:5000/week" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Weekly View</a>
             </div>
         </nav>
 

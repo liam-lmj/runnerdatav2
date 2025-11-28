@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, request, jsonify
 from database.database_queries import get_lap_data, get_activity_plot
-from database.database_helper_functions import map_html, lap_data_summary_fields, get_lap_types, filter_lap_data
+from database.database_helper_functions import map_html, lap_data_summary_fields, get_lap_types, filter_lap_data, format_unit
 
 activity_bp = Blueprint("activity", __name__)
 
@@ -8,7 +8,7 @@ activity_bp = Blueprint("activity", __name__)
 def weekly_view(activity_id):
     if not "user_id" in session:
         return redirect("/")
-    runner = session["user_id"]
+    unit = format_unit(session["unit"])
 
     lap_data = get_lap_data(activity_id)
     activity_lap_types = get_lap_types(lap_data)
@@ -20,13 +20,16 @@ def weekly_view(activity_id):
     plot = get_activity_plot(activity_id) 
     map = map_html(plot)
 
+
+
     if request.method == "POST" and request.json["type"] == "lap_change":
         return jsonify({"success": True, 
                         "updated_data": lap_data,
                         "total_distance": total_distance,
                         "formated_total_time": formated_total_time,
                         "average_heartrate": average_heartrate,
-                        "cadence": cadence}) 
+                        "cadence": cadence,
+                        "unit": unit}) 
     
     return render_template("activity.html", 
                            map=map, 
@@ -35,4 +38,5 @@ def weekly_view(activity_id):
                            total_distance=total_distance,
                            formated_total_time=formated_total_time,
                            average_heartrate=average_heartrate,
-                           cadence=cadence)
+                           cadence=cadence,
+                           unit=unit)

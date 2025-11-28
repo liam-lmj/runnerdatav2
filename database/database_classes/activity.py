@@ -14,7 +14,7 @@ class Activity:
 
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
-        c.execute(f"SELECT * FROM ACTIVITY WHERE activity_id = ?", (self.activity_id,))
+        c.execute("SELECT * FROM ACTIVITY WHERE activity_id = ?", (self.activity_id,))
         exists = c.fetchone()
         conn.close()
         if exists:

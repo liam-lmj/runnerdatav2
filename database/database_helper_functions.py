@@ -1,4 +1,4 @@
-from database.database_constants import seconds_to_hours, seconds_to_minutes
+from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict
 import polyline
 import folium
 
@@ -47,3 +47,6 @@ def map_html(plot):
               max(coords, key=lambda x: x[0])])
     map_html = map._repr_html_()
     return map_html
+
+def format_unit(unit):
+    return  units_dict.get(unit)

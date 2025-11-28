@@ -2,11 +2,12 @@ function update_charts(pie_chart) {
     Plotly.react('pie', pie_chart.data, pie_chart.layout || {});
 }
 
-function update_table(updated_data) {
+function update_table(updated_data, unit) {
     const table_body = document.getElementById("activity_table").querySelector("tbody");
     table_body.innerHTML = ""; 
     const headers = ["formatted_date", "run_description", "activity_meters", "formated_time", "heartrate_average"]
     const link_field = "run_description";
+    const distance_field = "activity_meters"
 
     for (let activity of updated_data) {
         const tr = document.createElement("tr");
@@ -20,6 +21,9 @@ function update_table(updated_data) {
                 link.textContent = activity[header];
                 cell.appendChild(link);
             }
+            else if (header === distance_field) {
+                cell.textContent = activity[header] + " " + unit;
+            }
             else {
                 cell.textContent = activity[header];
             }
@@ -30,9 +34,9 @@ function update_table(updated_data) {
     }
 }
 
-function initialiseCharts(pie_chart, data) {
+function initialiseCharts(pie_chart, data, inital_unit) {
     update_charts(pie_chart);
-    update_table(data);
+    update_table(data, inital_unit);
 
     const week_selector = document.getElementById("week");
     const total_distance = document.getElementById("total_distance");
@@ -51,13 +55,14 @@ function initialiseCharts(pie_chart, data) {
         .then(response => response.json())
         .then(data => {
             const pie_chart = JSON.parse(data.pie_chart);
-            total_distance.innerText = data.total_distance;
+            const unit = data.unit;
+            total_distance.innerText = data.total_distance + " " + unit;
             average_heartrate.innerText = data.average_heartrate;
             formated_total_time.innerText = data.formated_total_time;
             run_count.innerText = data.run_count;
-            const updated_data = data.updated_data
+            const updated_data = data.updated_data;
             update_charts(pie_chart);
-            update_table(updated_data);
+            update_table(updated_data, unit);
         });
     });
 }
