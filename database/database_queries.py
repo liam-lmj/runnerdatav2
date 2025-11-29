@@ -4,7 +4,6 @@ from database.database_constants import distance_fields, meters_to_miles, meters
 from database.database_helper_functions import format_time_as_hours, format_time_as_minutes, format_pace
 from database.database_classes.runner import Runner
 
-
 def dict_factory(cursor, row): 
     d = {}
     for idx, col in enumerate(cursor.description):
@@ -34,7 +33,11 @@ def get_weekly_trend(runner):
             SUM(CASE WHEN LAP.lap_type = 'Easy' THEN LAP.lap_meters ELSE 0 END) AS easy_distance,
             SUM(CASE WHEN LAP.lap_type = 'LT1' THEN LAP.lap_meters ELSE 0 END) AS lt1_distance,
             SUM(CASE WHEN LAP.lap_type = 'LT2' THEN LAP.lap_meters ELSE 0 END) AS lt2_distance,
-            SUM(CASE WHEN LAP.lap_type = 'Hard' THEN LAP.lap_meters ELSE 0 END) AS hard_distance
+            SUM(CASE WHEN LAP.lap_type = 'Hard' THEN LAP.lap_meters ELSE 0 END) AS hard_distance,
+            SUM(CASE WHEN LAP.lap_type = 'Easy' THEN LAP.lap_seconds ELSE 0 END) AS easy_seconds,
+            SUM(CASE WHEN LAP.lap_type = 'LT1' THEN LAP.lap_seconds ELSE 0 END) AS lt1_seconds,
+            SUM(CASE WHEN LAP.lap_type = 'LT2' THEN LAP.lap_seconds ELSE 0 END) AS lt2_seconds,
+            SUM(CASE WHEN LAP.lap_type = 'Hard' THEN LAP.lap_seconds ELSE 0 END) AS hard_seconds
         FROM ACTIVITY
         INNER JOIN LAP ON ACTIVITY.activity_id = LAP.activity_id
         WHERE ACTIVITY.runner_id = ? AND ACTIVITY.week in ( {safe_placeholder} )

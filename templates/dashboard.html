@@ -55,27 +55,48 @@
 
 	<div class="w3-panel">
 		<div class="w3-row-padding" style="margin:0 -16px">
-			<h5><b>Mileage Breakdown</b></h5>
+
+			<!-- Mileage Breakdown -->
 			<div class="w3-half">
-				<select class="drop-down"  id="mileage_trend_dropdown">
-					<option value="All">All</option>
+				<h5><b>Mileage Breakdown</b></h5>
+
+				<select class="drop-down" id="mileage_trend_dropdown">
+					<option value="All"selected >All</option>
 					<option value="easy_distance">Easy</option>
 					<option value="lt1_distance">LT1</option>
 					<option value="lt2_distance">LT2</option>
-					<option value="hard_distance">Hard</option>					
+					<option value="hard_distance">Hard</option>
 				</select>
 
 				<div id="mileage_trend_bar"></div>
 			</div>
-			<div class="w3-half"></div>
+
+			<!-- Pace Breakdown -->
+			<div class="w3-half">
+				<h5><b>Pace Breakdown</b></h5>
+
+				<select class="drop-down" id="pace_trend_dropdown">
+					<option value="Easy Pace" selected>Easy</option>
+					<option value="LT1 Pace">LT1</option>
+					<option value="LT2 Pace">LT2</option>
+					<option value="Hard Pace">Hard</option>
+				</select>
+
+				<div id="pace_trend_line"></div>
+			</div>
+
 		</div>
 	</div>
 
+
+
 	<script> 
 		const mileage_trend_bar_safe = {{ mileage_trend_plot | safe }};
+		const pace_trend_line_safe = {{ pace_trend_plot | safe }};
+
 	</script>
 
 	<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
-	<script>initialiseCharts(mileage_trend_bar_safe)</script>
+	<script>initialiseCharts(mileage_trend_bar_safe, pace_trend_line_safe);</script>
 
 {% endblock %}

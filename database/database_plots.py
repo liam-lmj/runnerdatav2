@@ -2,8 +2,8 @@ import json
 import plotly
 import plotly.express as px
 import pandas as pd
-from database.database_constants import lap_types, meters_to_miles, meters_to_kilometers, mileage_trend_axis, formatted_lap_types
-
+from database.database_constants import lap_types, meters_to_miles, meters_to_kilometers, mileage_trend_axis, formatted_lap_types, pace_conversion_dict
+from database.database_helper_functions import format_pace
 def weekly_mileage_type_pie(data):
     pie_df = pd.DataFrame({
         'Types': ['Easy', 'LT1', 'LT2', 'Hard'],
@@ -33,6 +33,7 @@ def mileage_trend_bar(data, unit, lap_type):
         'LT1 Distance': [week["lt1_distance"] * conversion for week in data],
         'LT2 Distance': [week["lt2_distance"] * conversion for week in data],
     })
+
     fig_bar = px.bar(bar_df, x="Weeks", y=y_axis)
     
     fig_bar.update_layout(
@@ -44,3 +45,48 @@ def mileage_trend_bar(data, unit, lap_type):
 
     bar_chart = json.dumps(fig_bar, cls=plotly.utils.PlotlyJSONEncoder)
     return bar_chart
+
+def pace_trend_line(data, distance_unit, type):
+    line_df = pd.DataFrame({
+        'Weeks': [week["week"] for week in data],
+        'Easy Pace': [week["easy_distance"] / week["easy_seconds"]
+                      if week["easy_seconds"] > 0 
+                      else None 
+                      for week in data],
+        'Hard Pace': [week["hard_distance"] / week["hard_seconds"]
+                      if week["hard_seconds"] > 0 
+                      else None 
+                      for week in data],
+        'LT1 Pace': [week["lt1_distance"] / week["lt1_seconds"]
+                      if week["lt1_seconds"] > 0 
+                      else None 
+                      for week in data],
+        'LT2 Pace': [week["lt2_distance"] / week["lt2_seconds"]
+                      if week["lt2_seconds"] > 0 
+                      else None 
+                      for week in data]
+    })
+
+    y_axis = line_df[type]
+
+    ticktexts = [format_pace(distance_unit, pace) for pace in y_axis]
+
+    fig_line = px.line(line_df, x="Weeks", y=y_axis)
+
+    fig_line.update_traces(mode='markers+lines',
+                           connectgaps=True)
+
+    fig_line.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis=dict(
+            tickvals=y_axis,
+            ticktext=ticktexts,
+            title="Pace",
+            autorange="reversed"
+        )
+    )
+
+    line_chart = json.dumps(fig_line, cls=plotly.utils.PlotlyJSONEncoder)
+    return line_chart
+
