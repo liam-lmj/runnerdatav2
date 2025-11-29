@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from database.database_constants import distance_fields, meters_to_miles, meters_to_kilometers, activity_base_url
+from database.database_constants import distance_fields, meters_to_miles, meters_to_kilometers, activity_base_url, weeks_to_trend
 from database.database_helper_functions import format_time_as_hours, format_time_as_minutes, format_pace
 from database.database_classes.runner import Runner
 
@@ -15,6 +15,36 @@ def database_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
+
+def get_weekly_trend(runner):
+    weeks_active, week = get_weeks_active(runner)
+    weeks_to_plot = weeks_active[:min(weeks_to_trend,len(weeks_active))]
+    safe_placeholder = " ,".join("?" * len(weeks_to_plot))
+
+    params = [runner] + weeks_to_plot
+
+    db_path = database_path()
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = dict_factory 
+    c = conn.cursor()
+    c.execute(f"""
+        SELECT 
+            ACTIVITY.week,
+            SUM(CASE WHEN LAP.lap_type = 'Easy' THEN LAP.lap_meters ELSE 0 END) AS easy_distance,
+            SUM(CASE WHEN LAP.lap_type = 'LT1' THEN LAP.lap_meters ELSE 0 END) AS lt1_distance,
+            SUM(CASE WHEN LAP.lap_type = 'LT2' THEN LAP.lap_meters ELSE 0 END) AS lt2_distance,
+            SUM(CASE WHEN LAP.lap_type = 'Hard' THEN LAP.lap_meters ELSE 0 END) AS hard_distance
+        FROM ACTIVITY
+        INNER JOIN LAP ON ACTIVITY.activity_id = LAP.activity_id
+        WHERE ACTIVITY.runner_id = ? AND ACTIVITY.week in ( {safe_placeholder} )
+        GROUP BY ACTIVITY.week
+        ORDER BY ACTIVITY.week
+    """, params)
+
+    data = c.fetchall()
+    conn.close()
+    return data
 
 def get_runner(runner):
     db_path = database_path

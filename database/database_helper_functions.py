@@ -16,8 +16,6 @@ def lap_data_summary_fields(data):
         cadence = 0
     return total_distance, formated_total_time, average_heartrate, cadence
     
-
-
 def get_lap_types(data):
     return {lap.get("lap_type") for lap in data}
 
@@ -27,7 +25,6 @@ def filter_lap_data(data, lap_type):
         if lap.get("lap_type") == lap_type:
             filtered_data.append(lap)
     return filtered_data
-
 
 def format_time_as_hours(total_seconds):
     total_hours = total_seconds * seconds_to_hours

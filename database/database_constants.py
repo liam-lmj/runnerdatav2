@@ -26,8 +26,10 @@ valid_activity_types = ["Run"]
 #conversions
 seconds_to_hours = 1 / 3600
 seconds_to_minutes = 1 / 60
+
 meters_to_miles = 1 / 1609.34
 meters_to_kilometers = 1 / 1000
+
 cadence_multiplier = 2
 pace_conversion_dict = {
     "Miles": 26.8223,
@@ -36,6 +38,7 @@ pace_conversion_dict = {
 
 #lap types
 lap_types = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance"]
+formatted_lap_types = ["Easy Distance", "LT1 Distance", "LT2 Distance", "Hard Distance"]
 
 #distance fields
 distance_fields = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance", "activity_meters", "lap_meters"]
@@ -44,7 +47,6 @@ distance_fields = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distan
 activity_base_url = "http://127.0.0.1:5000/activity/"
 
 #default runner set up
-
 default_preferred_unit = "Miles"
 default_preferred_tracking = "Heartrate"
 deafult_lt1 = 160
@@ -56,3 +58,14 @@ units_dict = {
     "Miles": "mi",
     "Kilometers": "km"
 }
+
+#dashboard
+weeks_to_trend = 5
+
+mileage_trend_axis = {
+    "easy_distance": "Easy Distance",
+    "lt1_distance": "LT1 Distance",
+    "lt2_distance": "LT2 Distance",
+    "hard_distance": "Hard Distance"
+}
+
