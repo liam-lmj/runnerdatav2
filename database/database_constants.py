@@ -61,6 +61,7 @@ units_dict = {
 
 #dashboard
 weeks_to_trend = 5
+y_axis_label_count = 5
 
 mileage_trend_axis = {
     "easy_distance": "Easy Distance",
