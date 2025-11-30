@@ -88,15 +88,48 @@
 		</div>
 	</div>
 
+	<div class="w3-panel">
+		<div class="w3-row-padding" style="margin:0 -16px">
+
+			<!-- Time Breakdown -->
+			<div class="w3-half">
+				<h5><b>Time Breakdown</b></h5>
+
+				<select class="drop-down" id="time_dropdown">
+					<option value="All"selected >Last Five Weeks</option>
+					{% for week in weeks_active %}
+					 	<option value="{{ week }}" >{{ week }}</option>
+					{% endfor %}
+=				</select>
+
+				<div id="time_pie_chart"></div>
+			</div>
+
+			<!-- TBC Breakdown -->
+			<div class="w3-half">
+				<h5><b>Tbc</b></h5>
+
+				<select class="drop-down" id="tbc_dropdown">
+					<option value="Easy Pace" selected>Easy</option>
+					<option value="LT1 Pace">LT1</option>
+					<option value="LT2 Pace">LT2</option>
+					<option value="Hard Pace">Hard</option>
+				</select>
+
+				<div id="tbc"></div>
+			</div>
+
+		</div>
+	</div>
 
 
 	<script> 
 		const mileage_trend_bar_safe = {{ mileage_trend_plot | safe }};
 		const pace_trend_line_safe = {{ pace_trend_plot | safe }};
-
+		const time_plot_safe = {{ time_plot | safe }};
 	</script>
 
 	<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
-	<script>initialiseCharts(mileage_trend_bar_safe, pace_trend_line_safe);</script>
+	<script>initialiseCharts(mileage_trend_bar_safe, pace_trend_line_safe, time_plot_safe);</script>
 
 {% endblock %}

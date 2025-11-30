@@ -2,8 +2,8 @@ import json
 import plotly
 import plotly.express as px
 import pandas as pd
-from database.database_constants import lap_types, meters_to_miles, meters_to_kilometers, mileage_trend_axis, formatted_lap_types, y_axis_label_count
-from database.database_helper_functions import format_pace
+from database.database_constants import lap_types, meters_to_miles, meters_to_kilometers, mileage_trend_axis, formatted_lap_types, y_axis_label_count, lap_types_seconds
+from database.database_helper_functions import format_pace, format_time_as_hours
 import math
 
 def weekly_mileage_type_pie(data):
@@ -99,6 +99,33 @@ def pace_trend_line(data, distance_unit, pace_type):
 
     line_chart = json.dumps(fig_line, cls=plotly.utils.PlotlyJSONEncoder)
     return line_chart
+
+def time_pie_chart(data, week):
+    if week != "All":
+        data = [week_dict for week_dict in data if week_dict.get("week") == week]
+
+    pie_df = pd.DataFrame({
+        'Types': ['Easy Time', 'LT1 Time', 'LT2 Time', 'Hard Time'],
+        'Time': [sum(week.get(lap_types_seconds, 0) for week in data) for lap_types_seconds in lap_types_seconds]
+    })
+
+    fig_pie = px.pie(pie_df, names="Types", values="Time")
+    fig_pie.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)'
+    )
+
+    fig_pie.update_traces(
+        hovertemplate=[format_time_as_hours(time) for time in pie_df['Time']],
+        hoverlabel=dict(
+                            font_size=20,
+                            font_family="Arial",
+                            bgcolor="lightyellow"
+                        )
+        )
+
+    pie_chart = json.dumps(fig_pie, cls=plotly.utils.PlotlyJSONEncoder)
+    return pie_chart 
 
 def y_annotation(fig, y_axis, distance_unit):
     gap = max(y_axis) - min(y_axis)

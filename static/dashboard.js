@@ -6,13 +6,16 @@ function update_pace_trend_line(line_chart) {
     Plotly.react('pace_trend_line', line_chart.data, line_chart.layout || {});
 }
 
-function initialiseCharts(mileage_trend_bar, pace_trend_line) {
+function update_time_pie_chart(pie_chart) {
+    Plotly.react('time_pie_chart', pie_chart.data, pie_chart.layout || {});
+}
+
+function initialiseCharts(mileage_trend_bar, pace_trend_line, time_pie_chart) {
     console.log(mileage_trend_bar);
     update_milage_trend_bar(mileage_trend_bar);
     update_pace_trend_line(pace_trend_line);
-
-    const mileage_trend_selector = document.getElementById("mileage_trend_dropdown");
-
+    update_time_pie_chart(time_pie_chart);
+    
     mileage_trend_dropdown.addEventListener('change', function() {
         const selected_type = this.value;
         fetch('/dashboard', {
@@ -38,6 +41,20 @@ function initialiseCharts(mileage_trend_bar, pace_trend_line) {
         .then(data => {
             const line_chart = JSON.parse(data.plot);
             update_pace_trend_line(line_chart);
+        });
+    });
+
+    time_dropdown.addEventListener('change', function() {
+        const selected_type = this.value;
+        fetch('/dashboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ selected_type, 'type': 'pie_time_change' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const pie_chart = JSON.parse(data.plot);
+            update_time_pie_chart(pie_chart);
         });
     });
 }
