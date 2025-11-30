@@ -4,3 +4,14 @@
     width: 170px; 
     height: 45px;  
 }
+
+.table-drop-down {
+    appearance: none;     
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    border: none;          
+    background: transparent; 
+    font-family: inherit;    
+    font-size: inherit;
+}
