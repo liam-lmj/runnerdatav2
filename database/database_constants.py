@@ -40,6 +40,7 @@ pace_conversion_dict = {
 lap_types = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance"]
 formatted_lap_types = ["Easy Distance", "LT1 Distance", "LT2 Distance", "Hard Distance"]
 lap_types_seconds = ["easy_seconds", "lt1_seconds", "lt2_seconds", "hard_seconds"]
+all_run_types = ["Easy Run Count", "Session Count"]
 
 #distance fields
 distance_fields = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distance", "activity_meters", "lap_meters"]

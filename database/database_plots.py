@@ -2,8 +2,8 @@ import json
 import plotly
 import plotly.express as px
 import pandas as pd
-from database.database_constants import lap_types, meters_to_miles, meters_to_kilometers, mileage_trend_axis, formatted_lap_types, y_axis_label_count, lap_types_seconds
-from database.database_helper_functions import format_pace, format_time_as_hours
+from database.database_constants import lap_types, mileage_trend_axis, formatted_lap_types, y_axis_label_count, lap_types_seconds, all_run_types
+from database.database_helper_functions import format_pace, format_time_as_hours, distance_conversion
 import math
 
 def weekly_mileage_type_pie(data):
@@ -21,11 +21,8 @@ def weekly_mileage_type_pie(data):
     return pie_chart   
 
 def mileage_trend_bar(data, unit, lap_type):
-    if unit == "Miles":
-        conversion = meters_to_miles
-    elif unit == "Kilometers":
-        conversion = meters_to_kilometers
-    
+    conversion = distance_conversion(unit)
+
     y_axis = mileage_trend_axis.get(lap_type, formatted_lap_types) if type(lap_type) == str else lap_type
 
     bar_df = pd.DataFrame({
@@ -126,6 +123,32 @@ def time_pie_chart(data, week):
 
     pie_chart = json.dumps(fig_pie, cls=plotly.utils.PlotlyJSONEncoder)
     return pie_chart 
+
+def session_trend_bar(data, activity_type):
+    if activity_type == "All":
+        y_axis = all_run_types
+    else:
+        y_axis = [activity_type]
+
+    bar_df = pd.DataFrame({
+        'Weeks': [week["week"] for week in data],
+        'Run Count': [week["activity_count"] for week in data],
+        'Easy Run Count': [week["easy_activity_count"] for week in data],
+        'Session Count': [week["activity_count"] - week["easy_activity_count"] for week in data]
+    })
+
+    fig_bar = px.bar(bar_df, x="Weeks", y=y_axis)
+    
+    fig_bar.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis_title=f"Distance", 
+        legend_title="Run Types"
+    )
+
+    bar_chart = json.dumps(fig_bar, cls=plotly.utils.PlotlyJSONEncoder)
+    return bar_chart
+
 
 def y_annotation(fig, y_axis, distance_unit):
     gap = max(y_axis) - min(y_axis)

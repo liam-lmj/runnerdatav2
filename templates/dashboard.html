@@ -15,7 +15,7 @@
 			<div class="w3-container w3-teal w3-padding-16">
 				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="total_distance">{{ total_distance }} {{ unit }}</h3>
+					<h3 id="total_distance">{{ yearly_distance }} {{ unit }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Yearly Distance</h4>
@@ -25,7 +25,7 @@
 			<div class="w3-container w3-blue w3-padding-16">
 				<div class="w3-left"><i class="fa fa-clock-o w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="formated_total_time">{{ formated_total_time }}</h3>
+					<h3 id="formated_total_time">{{ yearly_hours }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Yearly Hours</h4>
@@ -35,7 +35,7 @@
 			<div class="w3-container w3-red w3-padding-16">
 				<div class="w3-left"><i class="fa fa-line-chart w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="run_count">{{ run_count }}</h3>
+					<h3 id="run_count">{{ yearly_activity_count }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Yearly Run Count</h4>
@@ -45,7 +45,7 @@
 			<div class="w3-container w3-orange w3-text-white w3-padding-16">
 				<div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="session_count">{{ session_count }}</h3>
+					<h3 id="session_count">{{ yearly_session_count }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Yearly Session Count</h4>
@@ -105,18 +105,17 @@
 				<div id="time_pie_chart"></div>
 			</div>
 
-			<!-- TBC Breakdown -->
+			<!-- Run Count Breakdown -->
 			<div class="w3-half">
-				<h5><b>Tbc</b></h5>
+				<h5><b>Run Count Breakdown</b></h5>
 
-				<select class="drop-down" id="tbc_dropdown">
-					<option value="Easy Pace" selected>Easy</option>
-					<option value="LT1 Pace">LT1</option>
-					<option value="LT2 Pace">LT2</option>
-					<option value="Hard Pace">Hard</option>
+				<select class="drop-down" id="run_count_dropdown">
+					<option value="All" selected>Run Count</option>
+					<option value="Easy Run Count" selected>Easy</option>
+					<option value="Session Count">Session</option>
 				</select>
 
-				<div id="tbc"></div>
+				<div id="run_count_trend"></div>
 			</div>
 
 		</div>
@@ -127,9 +126,10 @@
 		const mileage_trend_bar_safe = {{ mileage_trend_plot | safe }};
 		const pace_trend_line_safe = {{ pace_trend_plot | safe }};
 		const time_plot_safe = {{ time_plot | safe }};
+		const run_count_safe = {{ run_count_plot | safe }};
 	</script>
 
 	<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
-	<script>initialiseCharts(mileage_trend_bar_safe, pace_trend_line_safe, time_plot_safe);</script>
+	<script>initialiseCharts(mileage_trend_bar_safe, pace_trend_line_safe, time_plot_safe, run_count_safe);</script>
 
 {% endblock %}

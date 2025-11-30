@@ -15,9 +15,14 @@ def database_path():
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
 
-def get_weekly_trend(runner):
+def get_weekly_trend(runner, include_all_weeks):
     weeks_active, week = get_weeks_active(runner)
-    weeks_to_plot = weeks_active[:min(weeks_to_trend,len(weeks_active))]
+
+    if include_all_weeks:
+        weeks_to_plot = weeks_active[:len(weeks_active)] 
+    else:
+        weeks_to_plot = weeks_active[:min(weeks_to_trend,len(weeks_active))]
+
     safe_placeholder = " ,".join("?" * len(weeks_to_plot))
 
     params = [runner] + weeks_to_plot
@@ -30,6 +35,15 @@ def get_weekly_trend(runner):
     c.execute(f"""
         SELECT 
             ACTIVITY.week,
+            COUNT(DISTINCT ACTIVITY.activity_id) AS activity_count,
+            COUNT(DISTINCT CASE 
+                    WHEN NOT EXISTS (
+                        SELECT 1 
+                        FROM LAP AS L2
+                        WHERE L2.activity_id = ACTIVITY.activity_id
+                        AND L2.lap_type <> 'Easy'
+                    ) THEN ACTIVITY.activity_id
+                END) AS easy_activity_count,
             SUM(CASE WHEN LAP.lap_type = 'Easy' THEN LAP.lap_meters ELSE 0 END) AS easy_distance,
             SUM(CASE WHEN LAP.lap_type = 'LT1' THEN LAP.lap_meters ELSE 0 END) AS lt1_distance,
             SUM(CASE WHEN LAP.lap_type = 'LT2' THEN LAP.lap_meters ELSE 0 END) AS lt2_distance,
@@ -37,7 +51,9 @@ def get_weekly_trend(runner):
             SUM(CASE WHEN LAP.lap_type = 'Easy' THEN LAP.lap_seconds ELSE 0 END) AS easy_seconds,
             SUM(CASE WHEN LAP.lap_type = 'LT1' THEN LAP.lap_seconds ELSE 0 END) AS lt1_seconds,
             SUM(CASE WHEN LAP.lap_type = 'LT2' THEN LAP.lap_seconds ELSE 0 END) AS lt2_seconds,
-            SUM(CASE WHEN LAP.lap_type = 'Hard' THEN LAP.lap_seconds ELSE 0 END) AS hard_seconds
+            SUM(CASE WHEN LAP.lap_type = 'Hard' THEN LAP.lap_seconds ELSE 0 END) AS hard_seconds,
+            SUM(LAP.lap_meters) AS total_distance,
+            SUM(LAP.lap_seconds) AS total_seconds
         FROM ACTIVITY
         INNER JOIN LAP ON ACTIVITY.activity_id = LAP.activity_id
         WHERE ACTIVITY.runner_id = ? AND ACTIVITY.week in ( {safe_placeholder} )

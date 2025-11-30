@@ -1,4 +1,4 @@
-from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict, pace_conversion_dict
+from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict, pace_conversion_dict, meters_to_miles, meters_to_kilometers
 import polyline
 import folium
 import math
@@ -56,3 +56,10 @@ def format_pace(unit, lap_pace):
     converted_lap_pace = conversion / lap_pace
     formatted_lap_pace = f"{int(converted_lap_pace)}:{round(60 * (converted_lap_pace - int(converted_lap_pace))):02d} /{format_unit(unit)}"
     return formatted_lap_pace
+
+def distance_conversion(unit):
+    if unit == "Miles":
+        conversion = meters_to_miles
+    elif unit == "Kilometers":
+        conversion = meters_to_kilometers
+    return conversion
