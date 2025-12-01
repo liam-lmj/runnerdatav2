@@ -8,4 +8,18 @@ def weekly_view():
         return redirect("/")
     runner = session["user_id"]     
 
-    return render_template("gear.html")
+    data = [{
+        "gear_id": 1,
+        "gear_name": "Tempus 2",
+        "distance": 500,
+        "default_type": "Easy",
+        "active": "Active"
+    }, 
+    {
+        "gear_id": 2,
+        "gear_name": "Metaspeed",
+        "distance": 100,
+        "default_type": "Session",
+        "active": "Active"
+    }]
+    return render_template("gear.html", data=data)

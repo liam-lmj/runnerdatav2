@@ -66,43 +66,28 @@
 			</div>
 			<div class="w3-twothird">
 				<h5><b>Gear</b></h5>
-				<table class="w3-table w3-striped w3-white" id="activity_table">
+				<table class="w3-table w3-striped w3-white" id="gear_table">
 					  <thead>
 						<tr class="w3-light-grey">
 							<th>Trainer</th>
-							<th>Miles (update)</th>
+							<th>Distance</th>
 							<th>Default Run Type</th>
 							<th>Status</th>
 						</tr>
 						</thead>
 					<tbody>
-						<tr>
-							<td contenteditable="true">Novablast</td>
-							<td contenteditable="true">500</td>
+						<tr id="1">
+							<td id="shoe-1" contenteditable="true">Novablast</td>
+							<td id="miles-1" contenteditable="true">500</td>
 							<td>
-							<select class="table-drop-down">
+							<select id="default_type-1" class="table-drop-down">
 								<option>Easy</option>
 								<option>Session</option>
+								<option>None</option>
 							</select>
 							</td>
 							<td>
-							<select class="table-drop-down">
-								<option>Active</option>
-								<option>Retired</option>
-							</select>
-							</td>
-						</tr>
-						<tr>
-							<td contenteditable="true">Novablast</td>
-							<td contenteditable="true">500</td>
-							<td>
-							<select class="table-drop-down">
-								<option>Easy</option>
-								<option>Session</option>
-							</select>
-							</td>
-							<td>
-							<select class="table-drop-down">
+							<select id="active-1" class="table-drop-down">
 								<option>Active</option>
 								<option>Retired</option>
 							</select>
@@ -114,12 +99,9 @@
 		</div>
 	</div>
 	
-	<script> 
-		const pie_chart_safe = {{ pie_chart | safe }};
-		const data_safe = {{ data | safe }};
-		const unit_string = "{{ unit }}";
-	</script>
-	<script src="{{ url_for('static', filename='week.js') }}"></script>
-	<script>initialiseCharts(pie_chart_safe, data_safe, unit_string)</script>
+	<script> data_safe = {{ data | safe }} </script>
+
+	<script src="{{ url_for('static', filename='gear.js') }}"></script>
+	<script>set_event_listners(data_safe)</script>
 
 {% endblock %}
