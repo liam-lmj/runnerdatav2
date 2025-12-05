@@ -15,6 +15,19 @@ def database_path():
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
 
+def get_gear_data(runner):
+    db_path = database_path()
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = dict_factory 
+    c = conn.cursor()
+    c.execute("SELECT * FROM GEAR WHERE GEAR.runner_id = ?", (runner, ))
+
+    data = c.fetchall()
+    conn.close()
+    
+    return data
+
 def get_weekly_trend(runner, include_all_weeks):
     weeks_active, week = get_weeks_active(runner)
 

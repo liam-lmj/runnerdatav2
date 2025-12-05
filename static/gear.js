@@ -1,7 +1,7 @@
 function update_table(data, unit) {
     const table_body = document.getElementById("gear_table").querySelector("tbody");
     table_body.innerHTML = ""; 
-    const headers = ["gear_name", "distance", "default_type", "active"];
+    const headers = ["gear_name", "total_distance", "default_type", "active"];
     const select_headers = ["default_type", "active"];
     const default_type_option = ["Easy", "Session", "None"];
     const active_options = ["Active", "Retired"];
@@ -27,13 +27,14 @@ function update_table(data, unit) {
                     }
                     select.appendChild(option);
                 }
+                select.id = header + "-" + gear["gear_id"];
 
                 cell.appendChild(select);
             }
             else {
                 cell.textContent = gear[header];
                 cell.contentEditable = "true";  
-                cell.id = gear[header] + "-" + gear["gear_id"]
+                cell.id = header + "-" + gear["gear_id"];
             }
 
 
@@ -70,10 +71,37 @@ function set_event_listners(data) {
 }
 
 function get_values(id) {
-    const shoe = document.getElementById('gear_name-' + id).textContent
-    const miles = document.getElementById('miles-' + id).textContent
-    const default_type = document.getElementById('default_type-' + id).value
-    const active = document.getElementById('active-' + id).value
+    const shoe = document.getElementById('gear_name-' + id).textContent;
+    const total_distance = document.getElementById('total_distance-' + id).textContent;
+    const default_type = document.getElementById('default_type-' + id).value;
+    const active = document.getElementById('active-' + id).value;
 
-    console.log('Row edited:', shoe, miles, default_type, active);
+    fetch(window.location.pathname, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'type': 'gear_change', shoe, total_distance, default_type, active, id })
+    })
+    .then(response => response.json())
+    .then(data => {
+        update_table(data.updated_data, "miles");
+    });
+}
+
+function add_new_row(){    
+    fetch(window.location.pathname, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'type': 'gear_change', 
+                                "shoe": "New Trainer", 
+                                "total_distance": "0",
+                                "default_type": "None", 
+                                "active": "Active",
+                                "id": "0" }) //default id that can't exist
+    })
+    .then(response => response.json())
+    .then(data => {
+        update_table(data.updated_data, "miles");
+    });
+
+    table_body.appendChild(tr);
 }

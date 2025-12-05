@@ -72,3 +72,6 @@ mileage_trend_axis = {
     "hard_distance": "Hard Distance"
 }
 
+#gear constants
+
+deafult_run_type = "None"
