@@ -72,6 +72,7 @@ def update_laps(access_token, activity, runner_id):
         lap_id = lap_dictionary["id"]
         lap = Lap(lap_id, lap_dictionary, runner.runner_id, runner.prefered_tracking, runner.lt1, runner.lt2, runner.hard)
         lap.add_to_database()
+        lap.update_matching_gear()
 
 def get_additional_session_attributes(access_token):
     response = requests.get(athlete_url, params={"access_token": access_token})

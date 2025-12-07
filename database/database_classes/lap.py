@@ -33,6 +33,12 @@ class Lap:
         else:
             self.lap_type = "Easy"
 
+        if self.lap_type == "Easy":
+            self.summary_type = "Easy"
+        else:
+            self.summary_type = "Session"
+        
+
     def add_to_database(self):
         db_path = self.database_path()
 
@@ -50,6 +56,19 @@ class Lap:
                    self.lap_heartrate_average,
                    self.lap_heartrate_max,
                    self.lap_cadence))
+        conn.commit()
+        conn.close()
+
+    def update_matching_gear(self):
+        db_path = self.database_path()
+
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("UPDATE GEAR SET total_distance = total_distance + ? WHERE runner_id = ? AND default_type = ?",
+                  (self.lap_meters,
+                   self.runner_id,
+                   self.summary_type
+                   ))
         conn.commit()
         conn.close()
 

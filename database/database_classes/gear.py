@@ -1,17 +1,23 @@
 import sqlite3
 import os
-from database.database_constants import deafult_run_type
+from database.database_constants import deafult_run_type, meters_to_kilometers, meters_to_miles
+from database.database_helper_functions import try_decimal
 
 class Gear:
-    def __init__(self, id, active, default_type, shoe, total_distance, runner):
+    def __init__(self, id, active, default_type, shoe, total_distance, unit, runner):
         self.gear_id = id
         self.gear_name = shoe
         self.runner_id = runner
-        self.total_distance = total_distance
+
+        if unit == "Miles":
+            conversion = 1 / meters_to_miles
+        elif unit == "Kilometers":
+            conversion = 1 / meters_to_kilometers
+
+        self.total_distance = str(try_decimal(total_distance) * try_decimal(conversion))
         self.default_type = default_type
         self.active = active
 
-        print(self.gear_exists())
         if self.gear_exists():
             self.update_existing_gear()
         else:

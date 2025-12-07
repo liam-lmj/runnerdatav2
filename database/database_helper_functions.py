@@ -10,6 +10,9 @@ def try_decimal(value):
     except (InvalidOperation, TypeError, ValueError):
         return False
     
+def gear_data_summary_fields(data):
+    print(data)
+
 def lap_data_summary_fields(data):
     total_time = sum(lap.get("lap_seconds", 0) for lap in data)
     formated_total_time = format_time_as_hours(total_time)

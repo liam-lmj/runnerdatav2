@@ -6,6 +6,20 @@ from database.database_constants import lap_types, mileage_trend_axis, formatted
 from database.database_helper_functions import format_pace, format_time_as_hours, distance_conversion
 import math
 
+def gear_pie(data):
+    pie_df = pd.DataFrame({
+        'Trainer': [gear["gear_name"] for gear in data],
+        'Distance': [gear["total_distance"] for gear in data]
+    })
+    fig_pie = px.pie(pie_df, names="Trainer", values="Distance")
+    fig_pie.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)'
+    )
+
+    pie_chart = json.dumps(fig_pie, cls=plotly.utils.PlotlyJSONEncoder)
+    return pie_chart   
+
 def weekly_mileage_type_pie(data):
     pie_df = pd.DataFrame({
         'Types': ['Easy', 'LT1', 'LT2', 'Hard'],

@@ -1,4 +1,10 @@
-function update_table(data, unit) {
+const drop_down = document.getElementById('gear_type_drop_down');
+
+function update_charts(pie_chart) {
+    Plotly.react('pie', pie_chart.data, pie_chart.layout || {});
+}
+
+function update_table(data) {
     const table_body = document.getElementById("gear_table").querySelector("tbody");
     table_body.innerHTML = ""; 
     const headers = ["gear_name", "total_distance", "default_type", "active"];
@@ -44,10 +50,28 @@ function update_table(data, unit) {
     }
 }
 
-function set_event_listners(data) {
-    update_table(data, "miles");
+function set_event_listners(data, pie_chart) {
+    update_table(data);
+    update_charts(pie_chart);
 
     const table = document.getElementById('gear_table');
+
+    drop_down.addEventListener('change', function() {
+        const selected_type = this.value;
+        fetch(window.location.pathname, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ selected_type, 'type': 'active_change', })
+        })
+        .then(response => response.json())
+        .then(data => {
+            update_table(data.updated_data);
+
+            const pie_chart = JSON.parse(data.pie_chart);
+            update_charts(pie_chart)
+
+        });
+        });
 
     table.addEventListener('blur', (event) => {
         const cell = event.target;
@@ -75,15 +99,19 @@ function get_values(id) {
     const total_distance = document.getElementById('total_distance-' + id).textContent;
     const default_type = document.getElementById('default_type-' + id).value;
     const active = document.getElementById('active-' + id).value;
+    const selected_type = drop_down.value
 
     fetch(window.location.pathname, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'type': 'gear_change', shoe, total_distance, default_type, active, id })
+        body: JSON.stringify({ 'type': 'gear_change', shoe, total_distance, default_type, active, id, selected_type })
     })
     .then(response => response.json())
     .then(data => {
-        update_table(data.updated_data, "miles");
+        update_table(data.updated_data);
+        const pie_chart = JSON.parse(data.pie_chart);
+        update_charts(pie_chart)
+
     });
 }
 
@@ -96,11 +124,12 @@ function add_new_row(){
                                 "total_distance": "0",
                                 "default_type": "None", 
                                 "active": "Active",
-                                "id": "0" }) //default id that can't exist
+                                "id": "0", //default id that can't exist
+                                "selected_type": "Active" })
     })
     .then(response => response.json())
     .then(data => {
-        update_table(data.updated_data, "miles");
+        update_table(data.updated_data);
     });
 
     table_body.appendChild(tr);

@@ -15,17 +15,31 @@ def database_path():
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
 
-def get_gear_data(runner):
+def get_gear_data(runner, unit, active):
+    sql = "SELECT * FROM GEAR WHERE runner_id = ?"
+    params = [runner]
+    if active != "All":
+        sql += "AND active = ?"
+        params.append(active)
+
     db_path = database_path()
 
     conn = sqlite3.connect(db_path)
     conn.row_factory = dict_factory 
     c = conn.cursor()
-    c.execute("SELECT * FROM GEAR WHERE GEAR.runner_id = ?", (runner, ))
+    c.execute(sql, params)
 
     data = c.fetchall()
     conn.close()
     
+    if unit == "Miles":
+        conversion = meters_to_miles
+    elif unit == "Kilometers":
+        conversion = meters_to_kilometers
+    
+    for gear in data:
+        gear["total_distance"] = round(gear["total_distance"] * conversion, 2)
+
     return data
 
 def get_weekly_trend(runner, include_all_weeks):
