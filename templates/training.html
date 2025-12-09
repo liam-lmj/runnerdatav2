@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Training Hub
+{% endblock %}
+
+{% block page %}
+
+	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
+		<select class="drop-down"  id="current">
+				<option value="Current" selected>Current</option>
+				<option value="Past" selected>Past</option>
+				<option value="All" selected>All</option>
+		</select>
+		<a href="http://127.0.0.1:5000/plan/"><button class="button">Add New Plan</button></a>
+	</div>
+
+	<div class="w3-row-padding w3-margin-bottom">
+		<div class="w3-quarter">
+			<div class="w3-container w3-teal w3-padding-16">
+				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="total_distance">{{ total_distance }} {{ unit }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Upcoming Planned {{ unit }}</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-blue w3-padding-16">
+				<div class="w3-left"><i class="fa fa-area-chart w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="average_distance">{{ average_distance }} {{ unit }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Average Upcoming {{ unit }}</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-red w3-padding-16">
+				<div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="upcoming_plan_count">{{ upcoming_plan_count }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Upcoming Plan Count</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-orange w3-text-white w3-padding-16">
+				<div class="w3-left"><i class="fa fa-percent w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="plan_success_rate">{{ plan_success_rate }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Plan Success Rate</h4>
+			</div>
+		</div>
+	</div>
+
+	<div class="w3-panel">
+		<div class="w3-row-padding" style="margin:0 -16px">
+			<div class="w3-third">
+				<h5><b>Mileage Breakdown</b></h5>
+				<div id="bar"></div>
+			</div>
+			<div class="w3-twothird">
+				<h5><b>Plans</b></h5>
+				<table class="w3-table w3-striped w3-white" id="plan_table">
+					  <thead>
+						<tr class="w3-light-grey">
+							<th>Week</th>
+							<th>Total Miles</th>
+							<th>Total Hard Miles</th>
+							<th>Planned Session Types</th>
+							<th>Outcome</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<script> 
+		const pie_chart_safe = {{ pie_chart | safe }};
+		const data_safe = {{ data | safe }};
+		const unit_string = "{{ unit }}";
+	</script>
+	<script src="{{ url_for('static', filename='training.js') }}"></script>
+	<script>initialiseCharts(pie_chart_safe, data_safe, unit_string)</script>
+
+{% endblock %}

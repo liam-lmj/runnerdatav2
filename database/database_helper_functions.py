@@ -9,9 +9,6 @@ def try_decimal(value):
         return Decimal(value)
     except (InvalidOperation, TypeError, ValueError):
         return False
-    
-def gear_data_summary_fields(data):
-    print(data)
 
 def lap_data_summary_fields(data):
     total_time = sum(lap.get("lap_seconds", 0) for lap in data)

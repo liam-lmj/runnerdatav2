@@ -73,5 +73,4 @@ mileage_trend_axis = {
 }
 
 #gear constants
-
 deafult_run_type = "None"

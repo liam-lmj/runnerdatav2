@@ -20,8 +20,6 @@ def weekly_view(activity_id):
     plot = get_activity_plot(activity_id) 
     map = map_html(plot)
 
-
-
     if request.method == "POST" and request.json["type"] == "lap_change":
         return jsonify({"success": True, 
                         "updated_data": lap_data,

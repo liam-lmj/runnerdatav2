@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Plan
+{% endblock %}
+
+{% block page %}
+
+	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
+		<select class="drop-down"  id="planed_week">
+				<option value="49" selected>49-2025</option>
+				<option value="50" selected>50-2025</option>
+				<option value="51" selected>51-2025</option>
+		</select>
+		<button class="button" onclick="add_new_session()">Add Session</button>
+		<button class="button" onclick="update_plans()">Save Plan</button>
+		<a href="http://127.0.0.1:5000/training/"><button class="button">Back to Plans</button></a>
+	</div>
+
+	<div class="w3-row-padding w3-margin-bottom">
+		<div class="w3-quarter">
+			<div class="w3-container w3-teal w3-padding-16">
+				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="total_distance">{{ total_distance }} {{ unit }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Weekly {{ unit }}</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-blue w3-padding-16">
+				<div class="w3-left"><i class="fa fa-area-chart w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="average_distance">{{ average_distance }} {{ unit }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Daily {{ unit }}</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-red w3-padding-16">
+				<div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="run_count">{{ run_count }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Run Count</h4>
+			</div>
+		</div>
+		<div class="w3-quarter">
+			<div class="w3-container w3-orange w3-text-white w3-padding-16">
+				<div class="w3-left"><i class="fa fa-percent w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h3 id="plan_success_rate">{{ session_count }}</h3>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Session Count</h4>
+			</div>
+		</div>
+	</div>
+
+	<div class="w3-panel">
+		<div class="w3-row-padding" style="margin:0 -16px">
+			<div class="w3-third">
+				<h5><b>Mileage Breakdown</b></h5>
+				<div id="bar"></div>
+			</div>
+			<div class="w3-twothird">
+				<h5><b>Daily Milage</b></h5>
+				<table class="w3-table w3-striped w3-white" id="plan_table">
+					  <thead>
+						<tr class="w3-light-grey">
+							<th></th>
+							<th>Monday</th>
+							<th>Tuesday</th>
+							<th>Wednesday</th>
+							<th>Thursday</th>
+							<th>Friday</th>
+							<th>Saturday</th>
+							<th>Sunday</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>AM {{ unit }}</th>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+						</tr>
+						<tr>
+							<th>PM {{ unit }}</th>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+						</tr>
+						<tr>
+							<th>Total</th>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div id="session_container" class="w3-row-padding w3-margin-bottom"></div>
+
+	<script>
+		let session_count_int = {{ session_count }};
+	</script>
+
+	<script src="{{ url_for('static', filename='plan.js') }}"></script>
+
+{% endblock %}

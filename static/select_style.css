@@ -5,6 +5,13 @@
     height: 45px;  
 }
 
+.drop-down-session {
+    background-color: #ddffff;
+    font-weight: bold;
+    width: 170px; 
+    height: 45px;  
+}
+
 .table-drop-down {
     appearance: none;     
     -webkit-appearance: none;

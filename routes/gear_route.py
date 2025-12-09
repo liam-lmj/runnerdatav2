@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, request, jsonify
 from database.database_queries import get_gear_data
 from database.database_classes.gear import Gear
-from database.database_helper_functions import try_decimal, gear_data_summary_fields
+from database.database_helper_functions import try_decimal
 from database.database_plots import gear_pie
 
 gear_bp = Blueprint("gear", __name__)
@@ -29,7 +29,6 @@ def weekly_view():
         data = get_gear_data(runner, unit, "Active")
     
     pie_chart = gear_pie(data)
-    gear_data_summary_fields(data)
 
     if request.method == "POST":
         return jsonify({"success": True, 

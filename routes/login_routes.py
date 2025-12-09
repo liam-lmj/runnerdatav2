@@ -26,4 +26,4 @@ def loaduser():
     session["user_name"] = name
     session["photo"] = photo
 
-    return redirect("/week")
+    return redirect("/dashboard")
