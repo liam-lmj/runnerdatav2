@@ -21,7 +21,7 @@ def weekly_view():
         data = get_week_data(most_recent_week, runner)
 
     run_count = len(data)
-    total_distance = sum(activity.get("activity_meters", 0) for activity in data)
+    total_distance = round(sum(activity.get("activity_meters", 0) for activity in data),2) #floating point error
 
     total_time_seconds = sum(activity.get("activity_seconds", 0) for activity in data)
     formated_total_time = format_time_as_hours(total_time_seconds)

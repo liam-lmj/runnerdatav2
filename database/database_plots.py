@@ -2,9 +2,26 @@ import json
 import plotly
 import plotly.express as px
 import pandas as pd
-from database.database_constants import lap_types, mileage_trend_axis, formatted_lap_types, y_axis_label_count, lap_types_seconds, all_run_types
+from database.database_constants import lap_types, mileage_trend_axis, formatted_lap_types, y_axis_label_count, lap_types_seconds, all_run_types, day_map
 from database.database_helper_functions import format_pace, format_time_as_hours, distance_conversion
 import math
+
+def plan_bar(totals, unit):
+    bar_df = pd.DataFrame({
+        'Day': list(day_map.values()),
+        'Distance': totals
+    })
+
+    fig_bar = px.bar(bar_df, x="Day", y="Distance", color="Day")
+    
+    fig_bar.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis_title=f"Distance {unit}", 
+    )
+
+    bar_chart = json.dumps(fig_bar, cls=plotly.utils.PlotlyJSONEncoder)
+    return bar_chart
 
 def gear_pie(data):
     pie_df = pd.DataFrame({
