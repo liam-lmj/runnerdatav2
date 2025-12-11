@@ -5,7 +5,6 @@
     Plan
 {% endblock %}
 
-
 {% block page %}
 
 	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
@@ -24,7 +23,7 @@
 			<div class="w3-container w3-teal w3-padding-16">
 				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="total_distance">{{ total_distance }} {{ unit }}</h3>
+					<h3 id="total_distance">{{ total_distance }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Weekly {{ unit }}</h4>
@@ -34,7 +33,7 @@
 			<div class="w3-container w3-blue w3-padding-16">
 				<div class="w3-left"><i class="fa fa-area-chart w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="average_distance">{{ average_distance }} {{ unit }}</h3>
+					<h3 id="average_distance">{{ average_distance }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Daily {{ unit }}</h4>
@@ -126,10 +125,13 @@
 
 	<script>
 		let session_count_int = {{ session_count }};
+		const bar_chart_safe = {{ bar_chart | safe }};
+		const am_values_safe = {{ am_values | safe }};
+		const pm_values_safe = {{ pm_values | safe }};
 	</script>
 
 	<script src="{{ url_for('static', filename='plan.js') }}"></script>
 
-	<script>set_event_listners();</script>
+	<script>intial_load();</script>
 
 {% endblock %}

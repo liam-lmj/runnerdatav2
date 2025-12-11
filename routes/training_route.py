@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, session, redirect, request, jsonif
 training_bp = Blueprint("training", __name__)
 
 @training_bp.route("/training/", methods=["GET", "POST"])
-def weekly_view():
+def training():
     if not "user_id" in session:
         return redirect("/")
     unit = session["unit"]

@@ -1,4 +1,4 @@
-from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict, pace_conversion_dict, meters_to_miles, meters_to_kilometers
+from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict, pace_conversion_dict, meters_to_miles, meters_to_kilometers, new_plan_values
 from decimal import Decimal, InvalidOperation
 import polyline
 import folium
@@ -9,6 +9,14 @@ def try_decimal(value):
         return Decimal(value)
     except (InvalidOperation, TypeError, ValueError):
         return False
+    
+def set_inital_plan_values():
+    am_values = new_plan_values.get("am_values")
+    pm_values = new_plan_values.get("pm_values")
+    session_count = new_plan_values.get("session_count")
+    sessions = new_plan_values.get("sessions")
+
+    return am_values, pm_values, session_count, sessions
 
 def lap_data_summary_fields(data):
     total_time = sum(lap.get("lap_seconds", 0) for lap in data)

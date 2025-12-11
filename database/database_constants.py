@@ -74,3 +74,11 @@ mileage_trend_axis = {
 
 #gear constants
 deafult_run_type = "None"
+
+#plan constants
+new_plan_values = {
+    "am_values": [0,0,0,0,0,0,0],
+    "pm_values": [0,0,0,0,0,0,0],
+    "session_count": 0,
+    "session": []
+}

@@ -73,6 +73,7 @@ function add_new_session() {
     update_session_count();
 }
 
+
 function remove_most_recent_session() {
     if (session_count_int > 0 ) {
         session_count_int--;
@@ -87,6 +88,24 @@ function update_session_count() {
     document.getElementById("session_count").textContent = session_count_int;
 }
 
+function intial_load() {
+    update_charts(bar_chart_safe);
+    set_inital_table_values();
+    set_event_listners();
+}
+
+function set_inital_table_values() {
+    for (let i =0; i < days_in_week.length; i++) {
+        const am_id = days_in_week[i] + "am";
+        const pm_id = days_in_week[i] + "pm";
+        const total_id = days_in_week[i] + "total";
+
+        document.getElementById(am_id).textContent = am_values_safe[i];
+        document.getElementById(pm_id).textContent = pm_values_safe[i];
+        document.getElementById(total_id).textContent = pm_values_safe[i] + am_values_safe[i];
+    }
+}
+
 function set_event_listners() {
     const table = document.getElementById('plan_table');
 
@@ -99,21 +118,13 @@ function set_event_listners() {
             cell.textContent = "0";
         }
         else {
-            let am_values = [];
-            let pm_values = [];
-
-            for (let i = 0; i < days_in_week.length; i++) {
-                const am_id = days_in_week[i] + "am";
-                const pm_id = days_in_week[i] + "pm";
-
-                am_values.push(Number(document.getElementById(am_id).textContent));
-                pm_values.push(Number(document.getElementById(pm_id).textContent));
-            } 
+            am_values = set_array_values("am");
+            pm_values = set_array_values("pm");
 
             fetch(window.location.pathname, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 'type': 'plan_chage', am_values, pm_values})
+                body: JSON.stringify({ 'type': 'plan_change', am_values, pm_values})
             })
             .then(response => response.json())
             .then(data => {
@@ -126,10 +137,53 @@ function set_event_listners() {
                     document.getElementById("average_distance").textContent = data.average_distance;
                     document.getElementById("run_count").textContent = data.run_count;
 
-                    const bar_chart = JSON.parse(data.bar_chart);
+                    const bar_chart = JSON.parse(data.updated_bar_chart);
                     update_charts(bar_chart);
                 }
             });      
         }
         }, true);
+}
+
+function save_plan() {
+    const am_values = set_array_values("am");
+    const pm_values = set_array_values("pm");
+    const sessions = session_array();
+
+    fetch(window.location.pathname, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'type': 'plan_save', am_values, pm_values, sessions})
+    })
+    .then(response => response.json())
+    .then(data => {
+        window.location.href = data.redirect;
+    });      
+
+}
+
+function session_array() {
+    let array = [];
+    for (let i = 0; i < session_count_int; i++) {
+        session_dict = {
+            "session_title": document.getElementById("session_title_" + i.toString()).textContent,
+            "session_desc": document.getElementById("session_desc_" + i.toString()).textContent,
+            "session_type": document.getElementById("session_type_" + i.toString()).value,
+        }
+        array.push(session_dict);
+    }
+
+    return array
+}
+
+function set_array_values(type) {
+    let values = [];
+
+    for (let i = 0; i < days_in_week.length; i++) {
+        const id = days_in_week[i] + type;
+
+        values.push(Number(document.getElementById(id).textContent));
+    } 
+
+    return values
 }
