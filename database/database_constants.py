@@ -80,5 +80,6 @@ new_plan_values = {
     "am_values": [0,0,0,0,0,0,0],
     "pm_values": [0,0,0,0,0,0,0],
     "session_count": 0,
-    "session": []
+    "session": [],
+    "sessions": {}
 }

@@ -73,7 +73,6 @@ function add_new_session() {
     update_session_count();
 }
 
-
 function remove_most_recent_session() {
     if (session_count_int > 0 ) {
         session_count_int--;
@@ -91,7 +90,27 @@ function update_session_count() {
 function intial_load() {
     update_charts(bar_chart_safe);
     set_inital_table_values();
+    add_inital_sessions(sessions_safe);
     set_event_listners();
+
+    if (plan_string === "new") {
+        document.getElementById("copy_button").style.display = "none";
+    }
+    else {
+        document.getElementById("planed_week").style.display = "none";
+    }
+}
+
+function add_inital_sessions(sessions) {
+    session_count_int = 0;
+
+    for (i = 0; i < sessions.length; i++) {
+        add_new_session();
+        description = document.getElementById("session_desc_" + i.toString()).textContent = sessions[i]["session_desc"];
+        description = document.getElementById("session_title_" + i.toString()).textContent = sessions[i]["session_title"];
+        description = document.getElementById("session_type_" + i.toString()).value = sessions[i]["session_type"];
+
+    }
 }
 
 function set_inital_table_values() {
@@ -150,16 +169,20 @@ function save_plan() {
     const pm_values = set_array_values("pm");
     const sessions = session_array();
 
+    let week = plan_string;
+    if (plan_string === "new") {
+        week = document.getElementById("planed_week").value;
+    }
+    
     fetch(window.location.pathname, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'type': 'plan_save', am_values, pm_values, sessions})
+        body: JSON.stringify({ 'type': 'plan_save', am_values, pm_values, sessions, week})
     })
     .then(response => response.json())
     .then(data => {
         window.location.href = data.redirect;
     });      
-
 }
 
 function session_array() {
@@ -186,4 +209,10 @@ function set_array_values(type) {
     } 
 
     return values
+}
+
+function copy_Plan() {
+    document.getElementById("copy_button").style.display = "none";
+    document.getElementById("planed_week").style.display = "";
+    plan_string = "new";
 }

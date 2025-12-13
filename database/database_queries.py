@@ -1,5 +1,7 @@
 import sqlite3
 import os
+import json
+import ast
 from database.database_constants import distance_fields, meters_to_miles, meters_to_kilometers, activity_base_url, weeks_to_trend
 from database.database_helper_functions import format_time_as_hours, format_time_as_minutes, format_pace
 from database.database_classes.runner import Runner
@@ -14,6 +16,43 @@ def database_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
+
+def get_all_existing_plans(runner):
+    db_path = database_path()
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = dict_factory
+
+    c = conn.cursor()
+    c.execute("SELECT week FROM PLAN WHERE runner_id = ?", (runner,))
+    plans = c.fetchall()
+    conn.close  
+
+    return [week.get("week") for week in plans]
+
+def get_existing_plan_values(plan_week, runner, unit):
+    if unit == "Miles":
+        conversion = meters_to_miles
+    elif unit == "Kilometers":
+        conversion = meters_to_kilometers
+
+    db_path = database_path()
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = dict_factory 
+
+    c = conn.cursor()
+    c.execute("SELECT * FROM PLAN WHERE week = ? AND runner_id = ?", (plan_week, runner))
+    plan = c.fetchone()
+    conn.close
+
+
+    am_values = [round(value * conversion, 2) for value in json.loads((plan["am_values"]))]
+    pm_values = [round(value * conversion, 2) for value in json.loads((plan["pm_values"]))]
+    sessions = ast.literal_eval(plan["sessions"])
+    session_count = len(sessions)
+
+    return am_values, pm_values, session_count, sessions
 
 def get_gear_data(runner, unit, active):
     sql = "SELECT * FROM GEAR WHERE runner_id = ?"

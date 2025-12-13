@@ -1,5 +1,6 @@
 from database.database_constants import seconds_to_hours, seconds_to_minutes, units_dict, pace_conversion_dict, meters_to_miles, meters_to_kilometers, new_plan_values
 from decimal import Decimal, InvalidOperation
+from datetime import datetime, timedelta
 import polyline
 import folium
 import math
@@ -10,6 +11,22 @@ def try_decimal(value):
     except (InvalidOperation, TypeError, ValueError):
         return False
     
+def next_five_weeks_plan(existing_plans):
+    next_five_weeks = []
+    i = 0
+    date = datetime.now()
+
+    while i < 5:
+        date += timedelta(days=7)
+        week_year = date.strftime("%W-%Y")
+
+        if not week_year in existing_plans:
+            next_five_weeks.append(week_year)
+            i += 1
+
+    return next_five_weeks
+
+
 def set_inital_plan_values():
     am_values = new_plan_values.get("am_values")
     pm_values = new_plan_values.get("pm_values")

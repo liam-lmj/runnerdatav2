@@ -9,10 +9,11 @@
 
 	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
 		<select class="drop-down"  id="planed_week">
-				<option value="49" selected>49-2025</option>
-				<option value="50" selected>50-2025</option>
-				<option value="51" selected>51-2025</option>
+			{% for week in next_plans %}
+				<option value="{{ week }}" {% if loop.first %}selected{% endif %}>{{ week }}</option>
+			{% endfor %}
 		</select>
+		<button class="button" id="copy_button" onclick="copy_Plan()">Copy Plan</button>
 		<button class="button" onclick="add_new_session()">Add Session</button>
 		<button class="button" onclick="remove_most_recent_session()">Remove Session</button>
 		<button class="button" onclick="save_plan()">Save Plan</button>
@@ -124,8 +125,10 @@
 	<div id="session_container" class="w3-row-padding w3-margin-bottom"></div>
 
 	<script>
+		let plan_string = "{{ plan }}";
 		let session_count_int = {{ session_count }};
 		const bar_chart_safe = {{ bar_chart | safe }};
+		const sessions_safe = {{ sessions | safe }};
 		const am_values_safe = {{ am_values | safe }};
 		const pm_values_safe = {{ pm_values | safe }};
 	</script>
