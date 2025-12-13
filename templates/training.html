@@ -21,7 +21,7 @@
 			<div class="w3-container w3-teal w3-padding-16">
 				<div class="w3-left"><i class="fa fa-road w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="total_distance">{{ total_distance }} {{ unit }}</h3>
+					<h3 id="upcoming_distance">{{ upcoming_distance }} {{ unit }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Upcoming Planned {{ unit }}</h4>
@@ -41,7 +41,7 @@
 			<div class="w3-container w3-red w3-padding-16">
 				<div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="upcoming_plan_count">{{ upcoming_plan_count }}</h3>
+					<h3 id="upcoming_plans">{{ upcoming_plans }}</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Upcoming Plan Count</h4>
@@ -51,7 +51,7 @@
 			<div class="w3-container w3-orange w3-text-white w3-padding-16">
 				<div class="w3-left"><i class="fa fa-percent w3-xxxlarge"></i></div>
 				<div class="w3-right">
-					<h3 id="plan_success_rate">{{ plan_success_rate }}</h3>
+					<h3 id="success_rate">{{ success_rate }} %</h3>
 				</div>
 				<div class="w3-clear"></div>
 				<h4>Plan Success Rate</h4>
@@ -68,16 +68,24 @@
 			<div class="w3-twothird">
 				<h5><b>Plans</b></h5>
 				<table class="w3-table w3-striped w3-white" id="plan_table">
-					  <thead>
+					<thead>
 						<tr class="w3-light-grey">
 							<th>Week</th>
 							<th>Total Miles</th>
-							<th>Total Hard Miles</th>
 							<th>Planned Session Types</th>
 							<th>Outcome</th>
 						</tr>
 					</thead>
-					<tbody></tbody>
+					<tbody>
+						{% for plan in training_hub_data %}
+						<tr>
+							<td><a href="{{plan_base_url}}/{{plan.week}}">{{ plan.week }}</a></td>
+							<td>{{ plan.formatted_distance }}</td>
+							<td>{{ plan.session_types }}</td>
+							<td>{{ plan.outcome }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
 				</table>
 			</div>
 		</div>

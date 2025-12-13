@@ -21,7 +21,7 @@ def weekly_view(plan):
     elif unit == "Kilometers":
         conversion = meters_to_kilometers
 
-    next_plans = next_five_weeks_plan(get_all_existing_plans(runner))
+    next_plans = next_five_weeks_plan(get_all_existing_plans(runner, False))
 
     if plan == "new":
         am_values, pm_values, session_count, sessions = set_inital_plan_values()

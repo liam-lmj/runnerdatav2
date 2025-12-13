@@ -4,13 +4,69 @@ from datetime import datetime, timedelta
 import polyline
 import folium
 import math
+import ast
 
 def try_decimal(value):
     try:
         return Decimal(value)
     except (InvalidOperation, TypeError, ValueError):
         return False
-    
+
+def format_training_hub_data(plans, weeks, unit):
+    date = datetime.now()
+    current_week_year = date.strftime("%W-%Y")
+    current_week, current_year = [part for part in current_week_year.split("-")]
+
+    conversion = distance_conversion(unit)
+
+    upcoming_plans = 0
+    upcoming_distance = 0
+
+    complete_plans = 0
+    successful_plans = 0
+
+    for plan in plans:
+        plan_week_year = plan.get("week","99-9999")
+        plan_week, plan_year = [part for part in plan_week_year.split("-")]
+        pending = (current_year, current_week) < (plan_year, plan_week)
+
+        am_values = ast.literal_eval(plan.get("am_values"))
+        pm_values = ast.literal_eval(plan.get("pm_values"))
+        total_distance = sum(am_values) + sum(pm_values)
+
+        sessions = ast.literal_eval(plan.get("sessions"))
+        session_count = len(sessions)
+
+        plan["converted_distance"] = round(conversion * total_distance, 2)
+        plan["formatted_distance"] = f"{plan["converted_distance"]} {format_unit(unit)}"
+        plan["session_types"] = (", ").join(set([session.get("session_type", "") for session in sessions]))
+
+        if pending:
+            outcome = "Pending"
+            upcoming_distance += plan["converted_distance"]
+            upcoming_plans += 1
+        else:
+            real_week = None
+            for week in weeks:
+                week_year = week.get("week", "99-999")
+                if week_year == plan_week_year:
+                    real_week = week
+                    break
+            if real_week:
+                complete_plans += 1
+                real_session_count = real_week.get("activity_count") - real_week.get("easy_activity_count")
+                real_distance = real_week.get("total_distance")
+
+                if real_session_count >= session_count and real_distance >= total_distance:
+                    outcome = "Success"
+                    successful_plans += 1
+                else:
+                    outcome = "Failed"
+
+        plan["outcome"] = outcome
+
+    return round(upcoming_plans, 2), round(upcoming_distance, 2), complete_plans, successful_plans, plans
+
 def next_five_weeks_plan(existing_plans):
     next_five_weeks = []
     i = 0

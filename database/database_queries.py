@@ -17,18 +17,21 @@ def database_path():
     db_path = os.path.join(current_dir, 'runner_data.db')
     return db_path
 
-def get_all_existing_plans(runner):
+def get_all_existing_plans(runner, details):
     db_path = database_path()
 
     conn = sqlite3.connect(db_path)
     conn.row_factory = dict_factory
 
     c = conn.cursor()
-    c.execute("SELECT week FROM PLAN WHERE runner_id = ?", (runner,))
+    c.execute("SELECT * FROM PLAN WHERE runner_id = ?", (runner,))
     plans = c.fetchall()
     conn.close  
 
-    return [week.get("week") for week in plans]
+    if details:
+        return plans
+    else:
+        return [week.get("week") for week in plans]
 
 def get_existing_plan_values(plan_week, runner, unit):
     if unit == "Miles":
