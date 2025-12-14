@@ -24,7 +24,7 @@ def dashboard():
 
         yearly_activity_count = sum(week_dict.get("activity_count", 0) 
                                     for week_dict in all_data 
-                                    if week_dict.get("week", 0).split("-")[1] == current_year) #week format is mm-yyyy
+                                    if week_dict.get("week", 0).split("-")[1] == current_year) #week format is ww-yyyy
         
         yearly_session_count = sum(week_dict.get("activity_count", 0) - week_dict.get("easy_activity_count", 0) 
                                    for week_dict in all_data

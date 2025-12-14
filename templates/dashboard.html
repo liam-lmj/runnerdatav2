@@ -97,7 +97,7 @@
 
 				<select class="drop-down" id="time_dropdown">
 					<option value="All"selected >Last Five Weeks</option>
-					{% for week in weeks_active %}
+					{% for week in weeks_active[:5] %}
 					 	<option value="{{ week }}" >{{ week }}</option>
 					{% endfor %}
 =				</select>
