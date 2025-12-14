@@ -6,9 +6,6 @@ from database.database_plots import training_bar
 
 training_bp = Blueprint("training", __name__)
 
-#TODO make mi/ miles consitent accross pages 
-#TODO bar chart
-
 @training_bp.route("/training/", methods=["GET", "POST"])
 def training():
     if not "user_id" in session:

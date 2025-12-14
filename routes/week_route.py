@@ -11,6 +11,7 @@ def weekly_view():
         return redirect("/")
     runner = session["user_id"]     
     unit = format_unit(session["unit"])
+    unit_raw = session["unit"]
 
     weeks_active, most_recent_week = get_weeks_active(runner)
 
@@ -41,7 +42,8 @@ def weekly_view():
                         "total_distance": total_distance,
                         "formated_total_time": formated_total_time,
                         "updated_data": data,
-                        "unit": unit}) 
+                        "unit": unit,
+                        "unit_raw": unit_raw}) 
 
     return render_template("week.html",
                            weeks_active=weeks_active,
@@ -51,4 +53,5 @@ def weekly_view():
                            formated_total_time=formated_total_time,
                            average_heartrate=average_heartrate,
                            pie_chart=pie_chart,
-                           unit=unit)
+                           unit=unit,
+                           unit_raw=unit_raw)

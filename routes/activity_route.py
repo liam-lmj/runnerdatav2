@@ -9,6 +9,7 @@ def weekly_view(activity_id):
     if not "user_id" in session:
         return redirect("/")
     unit = format_unit(session["unit"])
+    unit_raw = session["unit"]
 
     lap_data = get_lap_data(activity_id)
     activity_lap_types = get_lap_types(lap_data)
@@ -23,11 +24,11 @@ def weekly_view(activity_id):
     if request.method == "POST" and request.json["type"] == "lap_change":
         return jsonify({"success": True, 
                         "updated_data": lap_data,
-                        "total_distance": total_distance,
+                        "total_distance": round(total_distance, 2),
                         "formated_total_time": formated_total_time,
                         "average_heartrate": average_heartrate,
                         "cadence": cadence,
-                        "unit": unit}) 
+                        "unit": unit_raw}) 
     
     return render_template("activity.html", 
                            map=map, 
@@ -37,4 +38,5 @@ def weekly_view(activity_id):
                            formated_total_time=formated_total_time,
                            average_heartrate=average_heartrate,
                            cadence=cadence,
-                           unit=unit)
+                           unit=unit,
+                           unit_raw=unit_raw)

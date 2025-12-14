@@ -2,6 +2,8 @@ function update_charts(pie_chart) {
     Plotly.react('pie', pie_chart.data, pie_chart.layout || {});
 }
 
+
+
 function update_table(updated_data, unit) {
     const table_body = document.getElementById("activity_table").querySelector("tbody");
     table_body.innerHTML = ""; 
@@ -56,7 +58,8 @@ function initialiseCharts(pie_chart, data, inital_unit) {
         .then(data => {
             const pie_chart = JSON.parse(data.pie_chart);
             const unit = data.unit;
-            total_distance.innerText = data.total_distance + " " + unit;
+            const unit_raw = data.unit_raw;
+            total_distance.innerText = data.total_distance + " " + unit_raw;
             average_heartrate.innerText = data.average_heartrate;
             formated_total_time.innerText = data.formated_total_time;
             run_count.innerText = data.run_count;
