@@ -47,7 +47,7 @@ distance_fields = ["easy_distance", "lt1_distance", "lt2_distance", "hard_distan
 
 #base urls 
 activity_base_url = "http://127.0.0.1:5000/activity/"
-plan_bast_url = "http://127.0.0.1:5000/plan/"
+plan_base_url = "http://127.0.0.1:5000/plan/"
 
 #default runner set up
 default_preferred_unit = "Miles"

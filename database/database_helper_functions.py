@@ -12,6 +12,22 @@ def try_decimal(value):
     except (InvalidOperation, TypeError, ValueError):
         return False
 
+def filter_training_hub_data(data, filter):
+    if filter == "All":
+        return data
+    
+    output = []
+    if filter == "Pending":
+        for plan in data:
+            if plan["outcome"] == "Pending":
+                output.append(plan)
+    else:
+        for plan in data:
+            if plan["outcome"] != "Pending":
+                output.append(plan)
+
+    return output
+
 def format_training_hub_data(plans, weeks, unit):
     date = datetime.now()
     current_week_year = date.strftime("%W-%Y")
@@ -65,7 +81,9 @@ def format_training_hub_data(plans, weeks, unit):
 
         plan["outcome"] = outcome
 
-    return round(upcoming_plans, 2), round(upcoming_distance, 2), complete_plans, successful_plans, plans
+    ordered_plans = sorted(plans, key=lambda d: (d["week"].split("-")[1], d["week"].split("-")[0])) #format ww-yyyy 
+
+    return round(upcoming_plans, 2), round(upcoming_distance, 2), complete_plans, successful_plans, ordered_plans
 
 def next_five_weeks_plan(existing_plans):
     next_five_weeks = []

@@ -6,6 +6,23 @@ from database.database_constants import lap_types, mileage_trend_axis, formatted
 from database.database_helper_functions import format_pace, format_time_as_hours, distance_conversion
 import math
 
+def training_bar(plans, unit):
+    bar_df = pd.DataFrame({
+        'Week': [plan["week"] for plan in plans],
+        'Distance': [plan["converted_distance"] for plan in plans]
+    })
+
+    fig_bar = px.bar(bar_df, x="Week", y="Distance", color="Week")
+    
+    fig_bar.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis_title=f"Distance {unit}", 
+    )
+
+    bar_chart = json.dumps(fig_bar, cls=plotly.utils.PlotlyJSONEncoder)
+    return bar_chart
+
 def plan_bar(totals, unit):
     bar_df = pd.DataFrame({
         'Day': list(day_map.values()),

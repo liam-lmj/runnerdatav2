@@ -8,9 +8,9 @@
 {% block page %}
 
 	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
-		<select class="drop-down"  id="current">
-				<option value="Current" selected>Current</option>
-				<option value="Past" selected>Past</option>
+		<select class="drop-down"  id="drop_down">
+				<option value="Pending" selected>Pending</option>
+				<option value="Complete" selected>Complete</option>
 				<option value="All" selected>All</option>
 		</select>
 		<a href="http://127.0.0.1:5000/plan/new"><button class="button">Add New Plan</button></a>
@@ -76,27 +76,19 @@
 							<th>Outcome</th>
 						</tr>
 					</thead>
-					<tbody>
-						{% for plan in training_hub_data %}
-						<tr>
-							<td><a href="{{plan_base_url}}/{{plan.week}}">{{ plan.week }}</a></td>
-							<td>{{ plan.formatted_distance }}</td>
-							<td>{{ plan.session_types }}</td>
-							<td>{{ plan.outcome }}</td>
-						</tr>
-						{% endfor %}
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 	
 	<script> 
-		const pie_chart_safe = {{ pie_chart | safe }};
-		const data_safe = {{ data | safe }};
-		const unit_string = "{{ unit }}";
+		const bar_chart_safe = {{ bar_chart | safe }};
+		const data_safe = {{ training_hub_data | safe }};
+		const base_url = "{{ plan_base_url }}";
+		//const unit_string = "{{ unit }}";
 	</script>
 	<script src="{{ url_for('static', filename='training.js') }}"></script>
-	<script>initialiseCharts(pie_chart_safe, data_safe, unit_string)</script>
+	<script>initialiseContent(data_safe, bar_chart_safe)</script>
 
 {% endblock %}
