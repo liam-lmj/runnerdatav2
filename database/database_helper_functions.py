@@ -44,7 +44,7 @@ def format_training_hub_data(plans, weeks, unit):
     for plan in plans:
         plan_week_year = plan.get("week","99-9999")
         plan_week, plan_year = [part for part in plan_week_year.split("-")]
-        pending = (current_year, current_week) < (plan_year, plan_week)
+        pending = (current_year, current_week) <= (plan_year, plan_week)
 
         am_values = ast.literal_eval(plan.get("am_values"))
         pm_values = ast.literal_eval(plan.get("pm_values"))

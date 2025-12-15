@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from dotenv import load_dotenv
 from routes.login_routes import login_bp
 from routes.week_route import week_bp
@@ -24,6 +24,14 @@ app.register_blueprint(gear_bp)
 app.register_blueprint(training_bp)
 app.register_blueprint(plan_bp)
 
+@app.errorhandler(404)
+def not_found(e):
+  return render_template("page_not_found.html")
 
+@app.errorhandler(Exception) #can happen if user manaully changes url to database record that doesn't exist
+def handle_exception(e):
+  if type(e).__name__ == "TypeError":
+    return render_template("record_not_found.html")
+  
 if __name__ == "__main__":
     app.run(debug=True)

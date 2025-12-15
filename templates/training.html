@@ -86,7 +86,6 @@
 		const bar_chart_safe = {{ bar_chart | safe }};
 		const data_safe = {{ training_hub_data | safe }};
 		const base_url = "{{ plan_base_url }}";
-		//const unit_string = "{{ unit }}";
 	</script>
 	<script src="{{ url_for('static', filename='training.js') }}"></script>
 	<script>initialiseContent(data_safe, bar_chart_safe)</script>
