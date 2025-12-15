@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Running Gear
+{% endblock %}
+
+{% block page %}
+
+	<div class="w3-container" style="padding-top:22px; padding-bottom: 5px;">
+		<button class="button" onclick="add_new_row()">Save Settings</button>
+	</div>
+
+	<form class="w3-container">
+		<label><b>Preferred Unit</b></label>
+		<select id="unit" class="w3-select w3-white">
+			<option value="Miles">Miles</option>
+			<option value="Kilometers">Kilometers</option>
+		</select>
+		
+		<label><b>Tracking Method</b></label>
+		<select id="method" class="w3-select w3-white">
+			<option value="Heartrate">Heartrate</option>
+			<option value="Pace">Pace</option>
+		</select>
+
+		<label><b>LT1 Zone</b></label>
+		<input id="lt1" class="w3-input" type="number">
+
+		<label><b>LT2 Zone</b></label>
+		<input id="lt2" class="w3-input" type="number">
+
+		<label><b>Hard Zone</b></label>
+		<input id="hard" class="w3-input" type="number">
+	</form>
+	
+	<script> 
+		const data_safe = {{ data | safe }} 
+		const pie_chart_safe = {{ pie_chart | safe }};
+	</script>
+
+	<script src="{{ url_for('static', filename='gear.js') }}"></script>
+	<script>set_event_listners(data_safe, pie_chart_safe)</script>
+
+{% endblock %}

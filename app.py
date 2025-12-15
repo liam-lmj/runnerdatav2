@@ -8,7 +8,7 @@ from routes.dashboard_route import dashboard_bp
 from routes.gear_route import gear_bp
 from routes.training_route import training_bp
 from routes.plan_route import plan_bp
-
+from routes.settings_route import settings_bp
 
 load_dotenv()
 
@@ -23,6 +23,7 @@ app.register_blueprint(dashboard_bp)
 app.register_blueprint(gear_bp)
 app.register_blueprint(training_bp)
 app.register_blueprint(plan_bp)
+app.register_blueprint(settings_bp)
 
 @app.errorhandler(404)
 def not_found(e):
